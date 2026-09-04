@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#09090b"/>
+      <stop offset="100%" stop-color="#18181b"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" rx="12" fill="url(#bg)"/>
+  
+  
+            <!-- Video editor interface mockup -->
+            <rect x="40" y="40" width="480" height="240" rx="8" fill="#18181b" stroke="#27272a" stroke-width="2"/>
+            <rect x="540" y="40" width="220" height="240" rx="8" fill="#18181b" stroke="#27272a" stroke-width="2"/>
+            <polygon points="260,140 260,180 300,160" fill="#f97316"/>
+            <circle cx="280" cy="160" r="36" fill="none" stroke="#f97316" stroke-width="3" opacity="0.6"/>
+            <!-- Timeline tracks -->
+            <rect x="40" y="300" width="720" height="150" rx="8" fill="#18181b" stroke="#27272a" stroke-width="2"/>
+            <rect x="60" y="320" width="220" height="30" rx="4" fill="#f97316" opacity="0.85"/>
+            <rect x="300" y="320" width="340" height="30" rx="4" fill="#3b82f6" opacity="0.85"/>
+            <rect x="60" y="360" width="460" height="24" rx="4" fill="#10b981" opacity="0.8"/>
+            <rect x="60" y="394" width="620" height="24" rx="4" fill="#f59e0b" opacity="0.8"/>
+            <!-- Scrubber line -->
+            <line x1="380" y1="290" x2="380" y2="460" stroke="#ef4444" stroke-width="2"/>
+            <polygon points="374,290 386,290 380,300" fill="#ef4444"/>
+        
+
+  <!-- Header / Badge Overlay -->
+  <rect x="40" y="445" width="720" height="40" rx="6" fill="#09090b" opacity="0.9"/>
+  <rect x="52" y="455" width="8" height="20" rx="2" fill="#f97316"/>
+  <text x="70" y="470" font-family="system-ui, sans-serif" font-size="13" font-weight="700" fill="#ffffff">
+    School Server Configuration
+  </text>
+  <text x="740" y="470" font-family="system-ui, sans-serif" font-size="11" font-weight="500" fill="#a1a1aa" text-anchor="end">
+    On-site Moodle LMS Hosting
+  </text>
+</svg>

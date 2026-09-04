@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#09090b"/>
+      <stop offset="100%" stop-color="#18181b"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" rx="12" fill="url(#bg)"/>
+  
+  
+            <!-- Dashboard Charts & Metrics -->
+            <rect x="40" y="40" width="220" height="100" rx="8" fill="#18181b" stroke="#27272a" stroke-width="1.5"/>
+            <rect x="280" y="40" width="220" height="100" rx="8" fill="#18181b" stroke="#27272a" stroke-width="1.5"/>
+            <rect x="520" y="40" width="240" height="100" rx="8" fill="#18181b" stroke="#27272a" stroke-width="1.5"/>
+            <text x="60" y="80" font-family="system-ui, sans-serif" font-size="14" fill="#a1a1aa">Metric Score</text>
+            <text x="60" y="115" font-family="system-ui, sans-serif" font-size="28" font-weight="bold" fill="#ffffff">98.4%</text>
+            <text x="300" y="80" font-family="system-ui, sans-serif" font-size="14" fill="#a1a1aa">Processed Data</text>
+            <text x="300" y="115" font-family="system-ui, sans-serif" font-size="28" font-weight="bold" fill="#8b5cf6">5.5M+</text>
+            <text x="540" y="80" font-family="system-ui, sans-serif" font-size="14" fill="#a1a1aa">Adoption Rate</text>
+            <text x="540" y="115" font-family="system-ui, sans-serif" font-size="28" font-weight="bold" fill="#10b981">+34.2%</text>
+
+            <!-- Chart Bar / Heatmap -->
+            <rect x="40" y="160" width="460" height="280" rx="8" fill="#18181b" stroke="#27272a" stroke-width="1.5"/>
+            <path d="M70 380 Q 150 280 230 320 T 350 220 T 460 190" fill="none" stroke="#8b5cf6" stroke-width="3.5"/>
+            <line x1="70" y1="400" x2="470" y2="400" stroke="#3f3f46" stroke-width="1"/>
+            
+            <!-- Side breakdown -->
+            <rect x="520" y="160" width="240" height="280" rx="8" fill="#18181b" stroke="#27272a" stroke-width="1.5"/>
+            <circle cx="640" cy="250" r="55" fill="none" stroke="#8b5cf6" stroke-width="16" stroke-dasharray="240 100"/>
+            <circle cx="640" cy="250" r="55" fill="none" stroke="#3b82f6" stroke-width="16" stroke-dasharray="100 240" stroke-dashoffset="-240"/>
+            <text x="640" y="258" font-family="system-ui, sans-serif" font-size="18" font-weight="bold" fill="#ffffff" text-anchor="middle">72%</text>
+        
+
+  <!-- Header / Badge Overlay -->
+  <rect x="40" y="445" width="720" height="40" rx="6" fill="#09090b" opacity="0.9"/>
+  <rect x="52" y="455" width="8" height="20" rx="2" fill="#8b5cf6"/>
+  <text x="70" y="470" font-family="system-ui, sans-serif" font-size="13" font-weight="700" fill="#ffffff">
+    Google Forms Assessment
+  </text>
+  <text x="740" y="470" font-family="system-ui, sans-serif" font-size="11" font-weight="500" fill="#a1a1aa" text-anchor="end">
+    Concept Retention Survey
+  </text>
+</svg>

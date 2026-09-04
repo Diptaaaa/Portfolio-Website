@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link, usePage } from '@inertiajs/react';
 import { 
     Home, 
     BarChart3, 
@@ -10,11 +11,16 @@ import {
     FileText,
     ArrowUp
 } from 'lucide-react';
+import AnimatedCursor from '@/Components/AnimatedCursor';
 
-export default function PortfolioLayout({ children, activeSection = 'about', onSectionChange }) {
+export default function PortfolioLayout({ children }) {
     const [theme, setTheme] = useState('light');
-    const [currentSection, setCurrentSection] = useState(activeSection);
     const [showScrollTop, setShowScrollTop] = useState(false);
+    const { url, props } = usePage();
+    const settings = props.portfolio_settings || {};
+    const authUser = props.auth?.user;
+    const isNeonEnabled = settings.enable_neon_cursor !== '0';
+    const neonColor = settings.neon_cursor_color || 'magenta';
 
     useEffect(() => {
         const isDark = document.documentElement.classList.contains('dark') || localStorage.getItem('theme') === 'dark';
@@ -26,23 +32,10 @@ export default function PortfolioLayout({ children, activeSection = 'about', onS
         }
 
         const handleScroll = () => {
-            if (window.scrollY > 400) {
+            if (window.scrollY > 300) {
                 setShowScrollTop(true);
             } else {
                 setShowScrollTop(false);
-            }
-
-            // Auto-detect current active section on scroll
-            const sections = ['about', 'projects', 'experience', 'skills', 'certifications', 'contact'];
-            for (const section of sections) {
-                const el = document.getElementById(section);
-                if (el) {
-                    const rect = el.getBoundingClientRect();
-                    if (rect.top <= 200 && rect.bottom >= 100) {
-                        setCurrentSection(section);
-                        break;
-                    }
-                }
             }
         };
 
@@ -61,51 +54,56 @@ export default function PortfolioLayout({ children, activeSection = 'about', onS
         }
     };
 
-    const scrollToSection = (sectionId) => {
-        setCurrentSection(sectionId);
-        if (onSectionChange) onSectionChange(sectionId);
-        const element = document.getElementById(sectionId);
-        if (element) {
-            const offset = 40;
-            const bodyRect = document.body.getBoundingClientRect().top;
-            const elementRect = element.getBoundingClientRect().top;
-            const elementPosition = elementRect - bodyRect;
-            const offsetPosition = elementPosition - offset;
-
-            window.scrollTo({
-                top: offsetPosition,
-                behavior: 'smooth'
-            });
+    const isCurrent = (path) => {
+        if (path === '/') {
+            return url === '/' || url === '';
         }
+        return url.startsWith(path);
     };
 
     const navItems = [
-        { id: 'about', label: 'About', icon: Home },
-        { id: 'projects', label: 'Projects', icon: BarChart3 },
-        { id: 'experience', label: 'Experience', icon: Briefcase },
-        { id: 'skills', label: 'Skills & Certs', icon: Award },
-        { id: 'contact', label: 'Contact', icon: MessageSquare },
+        { id: 'home', label: 'About', path: '/', icon: Home },
+        { id: 'projects', label: 'Projects', path: '/projects', icon: BarChart3 },
+        { id: 'experience', label: 'Experience', path: '/experience', icon: Briefcase },
+        { id: 'skills', label: 'Skills & Certs', path: '/skills', icon: Award },
+        { id: 'contact', label: 'Contact', path: '/contact', icon: MessageSquare },
     ];
 
     return (
         <div className="min-h-screen bg-white text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100 transition-colors duration-200 selection:bg-zinc-900 selection:text-white dark:selection:bg-white dark:selection:text-zinc-900">
+            <AnimatedCursor enabled={isNeonEnabled} colorTheme={neonColor} />
+
             {/* Top Subtle Status Bar */}
-            <div className="border-b border-zinc-100 dark:border-zinc-900 py-2.5 px-6 sticky top-0 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md z-30">
+            <header className="border-b border-zinc-100 dark:border-zinc-900 py-2.5 px-6 sticky top-0 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md z-30">
                 <div className="max-w-2xl mx-auto flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400">
-                    <div className="flex items-center gap-2">
+                    <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
                         <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                        <span className="font-medium text-zinc-700 dark:text-zinc-300">Available for Opportunities</span>
-                    </div>
-                    <div className="hidden sm:flex items-center gap-3 font-mono text-[11px]">
-                        <span>Data Analyst & IT</span>
-                        <span>•</span>
-                        <span>Malang, Indonesia</span>
+                        <span className="font-medium text-zinc-700 dark:text-zinc-300">
+                            {settings.status_badge || 'Available for Opportunities'}
+                        </span>
+                    </Link>
+                    <div className="flex items-center gap-3 font-mono text-[11px]">
+                        <span className="hidden sm:inline-block">Data Analyst & IT</span>
+                        <span className="hidden sm:inline-block">•</span>
+                        <span>{settings.location || 'Malang, Indonesia'}</span>
+
+                        {authUser && (
+                            <>
+                                <span>•</span>
+                                <Link
+                                    href={route('admin.config')}
+                                    className="px-2 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 font-sans font-medium hover:bg-indigo-100 transition"
+                                >
+                                    Admin Config
+                                </Link>
+                            </>
+                        )}
                     </div>
                 </div>
-            </div>
+            </header>
 
             {/* Main Centered Content */}
-            <main className="max-w-2xl mx-auto px-6 pt-12 sm:pt-16 pb-36">
+            <main className="max-w-2xl mx-auto px-6 pt-10 sm:pt-14 pb-36">
                 {children}
             </main>
 
@@ -114,17 +112,17 @@ export default function PortfolioLayout({ children, activeSection = 'about', onS
                 <nav 
                     role="navigation"
                     aria-label="Main menu"
-                    className="flex items-center gap-1 sm:gap-1.5 px-3 py-2 bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md rounded-2xl border border-zinc-200/90 dark:border-zinc-800 shadow-2xl shadow-zinc-900/10 dark:shadow-black/60"
+                    className="flex items-center gap-1 sm:gap-1.5 px-3 py-2 bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md rounded-lg border border-zinc-200/90 dark:border-zinc-800 shadow-2xl shadow-zinc-900/10 dark:shadow-black/60"
                 >
                     {navItems.map((item) => {
                         const Icon = item.icon;
-                        const isActive = currentSection === item.id || (item.id === 'skills' && currentSection === 'certifications');
+                        const active = isCurrent(item.path);
                         return (
-                            <button
+                            <Link
                                 key={item.id}
-                                onClick={() => scrollToSection(item.id)}
-                                className={`group relative p-2.5 rounded-xl transition-all duration-150 ${
-                                    isActive
+                                href={item.path}
+                                className={`group relative p-2.5 rounded-lg transition-all duration-150 ${
+                                    active
                                         ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white shadow-sm'
                                         : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50'
                                 }`}
@@ -132,18 +130,32 @@ export default function PortfolioLayout({ children, activeSection = 'about', onS
                                 aria-label={item.label}
                             >
                                 <Icon className="w-4 h-4" />
-                                <span className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-md bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-[10px] font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-md">
+                                <span className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-lg bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-[10px] font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-md">
                                     {item.label}
                                 </span>
-                            </button>
+                            </Link>
                         );
                     })}
+
+                    {authUser && (
+                        <Link
+                            href={route('admin.config')}
+                            className="group relative p-2.5 rounded-lg text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/50 transition-all duration-150"
+                            title="Admin Configuration"
+                            aria-label="Admin Configuration"
+                        >
+                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                            <span className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-lg bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-[10px] font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-md">
+                                Konfigurasi
+                            </span>
+                        </Link>
+                    )}
 
                     <div className="w-[1px] h-4 bg-zinc-200 dark:bg-zinc-800 mx-1" />
 
                     <button
                         onClick={toggleTheme}
-                        className="group relative p-2.5 rounded-xl text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-all duration-150"
+                        className="group relative p-2.5 rounded-lg text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-all duration-150"
                         title={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
                         aria-label="Toggle Theme"
                     >
@@ -152,7 +164,7 @@ export default function PortfolioLayout({ children, activeSection = 'about', onS
                         ) : (
                             <Sun className="w-4 h-4 text-amber-400" />
                         )}
-                        <span className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-md bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-[10px] font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-md">
+                        <span className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-lg bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-[10px] font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-md">
                             {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
                         </span>
                     </button>

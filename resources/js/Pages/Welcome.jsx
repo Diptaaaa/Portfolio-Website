@@ -1,17 +1,18 @@
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import PortfolioLayout from '@/Layouts/PortfolioLayout';
 import TechIcon from '@/Components/TechIcon';
-import { 
-    Mail, 
-    Phone, 
-    ExternalLink, 
-    MapPin, 
-    GraduationCap, 
-    Briefcase, 
-    FolderGit2, 
-    Award, 
-    MessageSquare, 
-    Send, 
+import { getAvatarStyle } from '@/Utils/avatarHelper';
+import {
+    Mail,
+    Phone,
+    ExternalLink,
+    MapPin,
+    GraduationCap,
+    Briefcase,
+    FolderGit2,
+    Award,
+    MessageSquare,
+    Send,
     Calendar,
     ChevronRight,
     Sparkles,
@@ -25,34 +26,43 @@ import {
 import { useState } from 'react';
 
 export default function Welcome() {
+    const { props } = usePage();
+    const settings = props.portfolio_settings || {};
     const [filterCategory, setFilterCategory] = useState('all');
 
     const contactLinks = [
         {
             label: 'WhatsApp',
-            value: '+62 877 7375 9636',
-            href: 'https://wa.me/qr/OR62X7KAFNBEF1',
+            value: settings.whatsapp_number || '+62 877 7375 9636',
+            href: settings.whatsapp_url || 'https://wa.me/qr/OR62X7KAFNBEF1',
             icon: Phone,
             color: 'hover:text-emerald-500 dark:hover:text-emerald-400'
         },
         {
             label: 'Email',
-            value: 'raflipradipta321@gmail.com',
-            href: 'mailto:raflipradipta321@gmail.com',
+            value: settings.email || 'raflipradipta321@gmail.com',
+            href: `mailto:${settings.email || 'raflipradipta321@gmail.com'}`,
             icon: Mail,
             color: 'hover:text-red-500 dark:hover:text-red-400'
         },
         {
             label: 'LinkedIn',
-            value: 'muhammad-rafli-pradipta',
-            href: 'https://www.linkedin.com/in/muhammad-rafli-pradipta-45b165288/',
+            value: settings.linkedin_username || 'muhammad-rafli-pradipta',
+            href: settings.linkedin_url || 'https://www.linkedin.com/in/muhammad-rafli-pradipta-45b165288/',
             techIcon: 'linkedin',
             color: 'hover:text-blue-500 dark:hover:text-blue-400'
         },
         {
-            label: 'Canva Portfolio',
+            label: 'Instagram',
+            value: settings.instagram_username || '@rrafli.pd',
+            href: settings.instagram_url || 'https://www.instagram.com/rrafli.pd?igsi=MXJrZTJzeTZpeWRiMQ==',
+            techIcon: 'instagram',
+            color: 'hover:text-pink-500 dark:hover:text-pink-400'
+        },
+        {
+            label: settings.canva_label || 'Canva Portfolio',
             value: 'portoraflipradipta.my.canva.site',
-            href: 'https://portoraflipradipta.my.canva.site/',
+            href: settings.canva_url || 'https://portoraflipradipta.my.canva.site/',
             icon: ExternalLink,
             color: 'hover:text-purple-500 dark:hover:text-purple-400'
         }
@@ -234,33 +244,29 @@ export default function Welcome() {
                 {/* Profile Header & Contact Info */}
                 <section id="about" className="space-y-6 scroll-mt-24">
                     <header className="flex flex-col sm:flex-row sm:items-center gap-5">
-                        <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 shadow-md flex-shrink-0">
+                        <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 shadow-md flex-shrink-0">
                             <img
-                                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=300&auto=format&fit=crop"
-                                alt="Muhammad Rafli Pradipta"
-                                className="w-full h-full object-cover grayscale contrast-125"
+                                src={settings.avatar_url || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=300&auto=format&fit=crop"}
+                                alt={settings.full_name || "Muhammad Rafli Pradipta"}
+                                className="w-full h-full"
+                                style={getAvatarStyle(settings)}
                                 onError={(e) => {
                                     e.target.onerror = null;
-                                    e.target.src = "https://api.dicebear.com/7.x/initials/svg?seed=Rafli+Pradipta";
+                                    e.target.src = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(settings.full_name || 'Rafli Pradipta')}`;
                                 }}
                             />
                         </div>
 
                         <div className="space-y-1 flex-1">
-                            <div className="flex flex-wrap items-center gap-2">
-                                <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 uppercase">
-                                    Muhammad Rafli Pradipta
-                                </h1>
-                                <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 border border-emerald-200/80 dark:border-emerald-800">
-                                    GPA 3.75
-                                </span>
-                            </div>
+                            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 uppercase">
+                                {settings.full_name || 'Muhammad Rafli Pradipta'}
+                            </h1>
                             <p className="text-sm font-medium text-zinc-600 dark:text-zinc-400">
-                                Data Analyst & Information Technology Education Graduate
+                                {settings.job_title || 'Data Analyst & Information Technology Education Graduate'}
                             </p>
                             <div className="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400 pt-0.5">
                                 <MapPin className="w-3.5 h-3.5 text-zinc-400" />
-                                <span>Malang, East Java, Indonesia</span>
+                                <span>{settings.location || 'Malang, East Java, Indonesia'}</span>
                             </div>
                         </div>
                     </header>
@@ -275,7 +281,7 @@ export default function Welcome() {
                                     href={item.href}
                                     target={item.href.startsWith('http') ? '_blank' : undefined}
                                     rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-zinc-200/90 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-900/60 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-xs font-medium text-zinc-600 dark:text-zinc-300 transition-colors shadow-sm ${item.color}`}
+                                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-zinc-200/90 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-900/60 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-xs font-medium text-zinc-600 dark:text-zinc-300 transition-colors shadow-sm ${item.color}`}
                                 >
                                     {item.techIcon ? (
                                         <TechIcon name={item.techIcon} className="w-3.5 h-3.5" />
@@ -289,57 +295,90 @@ export default function Welcome() {
                     </div>
 
                     {/* Profile Summary Card */}
-                    <div className="p-5 rounded-2xl bg-zinc-50/70 dark:bg-zinc-900/50 border border-zinc-200/80 dark:border-zinc-800/80 space-y-2.5">
+                    <div className="p-5 rounded-lg bg-zinc-50/70 dark:bg-zinc-900/50 border border-zinc-200/80 dark:border-zinc-800/80 space-y-2.5">
                         <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                             <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
-                            <span>Profile Summary</span>
+                            <span>{settings.summary_title || 'Profile Summary'}</span>
                         </div>
                         <p className="text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed">
-                            Detail-oriented Data Analyst and Information Technology Education graduate (GPA 3.75/4.00) with strong expertise in end-to-end data processing, exploratory analysis, and data visualization. Proficient in Python (Pandas), SQL, and Microsoft Excel to clean complex datasets, query relational databases, and extract actionable business insights. Skilled in leveraging modern AI analytics workflows to optimize data processing pipelines and streamline reporting. Adept at translating complex data findings into data-backed strategic recommendations and communicating effectively with technical and non-technical stakeholders.
+                            {settings.bio_summary || 'Detail-oriented Data Analyst and Information Technology Education graduate (GPA 3.75/4.00) with strong expertise in end-to-end data processing, exploratory analysis, and data visualization. Proficient in Python (Pandas), SQL, and Microsoft Excel to clean complex datasets, query relational databases, and extract actionable business insights. Skilled in leveraging modern AI analytics workflows to optimize data processing pipelines and streamline reporting. Adept at translating complex data findings into data-backed strategic recommendations and communicating effectively with technical and non-technical stakeholders.'}
                         </p>
                     </div>
 
                     {/* Education Card */}
-                    <div className="p-5 rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/30 space-y-3 shadow-sm">
-                        <div className="flex items-start justify-between gap-2">
-                            <div className="flex items-center gap-2.5">
-                                <div className="p-2 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-900/50">
-                                    <GraduationCap className="w-4 h-4" />
-                                </div>
-                                <div>
-                                    <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-                                        Universitas Brawijaya
-                                    </h3>
-                                    <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                                        Faculty of Computer Science &middot; Bachelor's in IT Education
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="text-right">
-                                <span className="text-xs font-mono text-zinc-500 dark:text-zinc-400 block">
-                                    Aug 2022 - Aug 2026
-                                </span>
-                                <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
-                                    GPA 3.75 / 4.00
-                                </span>
-                            </div>
-                        </div>
+                    <div className="space-y-3">
+                        {(props.educations && props.educations.length > 0 ? props.educations : [
+                            {
+                                id: 'default',
+                                institution: 'Universitas Brawijaya',
+                                degree: "Faculty of Computer Science · Bachelor's in IT Education",
+                                period: 'Aug 2022 - Aug 2026',
+                                gpa: 'GPA 3.75 / 4.00',
+                                logo_url: '/images/ub-logo.svg',
+                                coursework: coursework,
+                            }
+                        ]).map((item, index) => {
+                            const courses = Array.isArray(item.coursework)
+                                ? item.coursework
+                                : (typeof item.coursework === 'string' ? item.coursework.split(',').map(s => s.trim()).filter(Boolean) : []);
 
-                        <div className="pt-2 border-t border-zinc-100 dark:border-zinc-800/60">
-                            <span className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 block mb-2">
-                                Relevant Coursework:
-                            </span>
-                            <div className="flex flex-wrap gap-1.5">
-                                {coursework.map((course, idx) => (
-                                    <span
-                                        key={idx}
-                                        className="text-[11px] px-2.5 py-1 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-medium"
-                                    >
-                                        {course}
-                                    </span>
-                                ))}
-                            </div>
-                        </div>
+                            return (
+                                <div 
+                                    key={item.id || index}
+                                    className="p-5 rounded-lg border border-zinc-200/80 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/30 space-y-3 shadow-sm"
+                                >
+                                    <div className="flex items-start justify-between gap-2">
+                                        <div className="flex items-center gap-2.5">
+                                            <img
+                                                src={item.logo_url || "/images/ub-logo.svg"}
+                                                alt={`Logo ${item.institution}`}
+                                                className="w-10 h-10 object-contain flex-shrink-0"
+                                                onError={(e) => {
+                                                    e.target.onerror = null;
+                                                    e.target.src = "https://upload.wikimedia.org/wikipedia/commons/b/bb/Logo_Universitas_Brawijaya.svg";
+                                                }}
+                                            />
+                                            <div>
+                                                <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+                                                    {item.institution}
+                                                </h3>
+                                                <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                                                    {item.degree}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div className="text-right">
+                                            <span className="text-xs font-mono text-zinc-500 dark:text-zinc-400 block">
+                                                {item.period}
+                                            </span>
+                                            {item.gpa && (
+                                                <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
+                                                    {item.gpa.startsWith('GPA') ? item.gpa : `GPA ${item.gpa}`}
+                                                </span>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {courses.length > 0 && (
+                                        <div className="pt-2 border-t border-zinc-100 dark:border-zinc-800/60">
+                                            <span className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 block mb-2">
+                                                Relevant Coursework:
+                                            </span>
+                                            <div className="flex flex-wrap gap-1.5">
+                                                {courses.map((course, idx) => (
+                                                    <span
+                                                        key={idx}
+                                                        className="text-[11px] px-2.5 py-1 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-medium"
+                                                    >
+                                                        {course}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            );
+                        })}
                     </div>
                 </section>
 
@@ -361,7 +400,7 @@ export default function Welcome() {
                         {projects.map((proj) => (
                             <article
                                 key={proj.id}
-                                className="p-5 sm:p-6 rounded-2xl border border-zinc-200/90 dark:border-zinc-800/90 bg-white dark:bg-zinc-900/40 hover:border-zinc-300 dark:hover:border-zinc-700 transition shadow-sm space-y-4"
+                                className="p-5 sm:p-6 rounded-lg border border-zinc-200/90 dark:border-zinc-800/90 bg-white dark:bg-zinc-900/40 hover:border-zinc-300 dark:hover:border-zinc-700 transition shadow-sm space-y-4"
                             >
                                 <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
                                     <div className="space-y-1">
@@ -469,7 +508,7 @@ export default function Welcome() {
                         {organizationalExperiences.map((org, index) => (
                             <div
                                 key={index}
-                                className="p-5 rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 bg-zinc-50/40 dark:bg-zinc-900/30 space-y-3"
+                                className="p-5 rounded-lg border border-zinc-200/80 dark:border-zinc-800/80 bg-zinc-50/40 dark:bg-zinc-900/30 space-y-3"
                             >
                                 <div className="flex items-start justify-between gap-2">
                                     <div>
@@ -517,7 +556,7 @@ export default function Welcome() {
                         {keySkills.map((skill, idx) => (
                             <div
                                 key={idx}
-                                className="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/70 hover:border-indigo-400 dark:hover:border-indigo-500/50 shadow-sm transition group"
+                                className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/70 hover:border-indigo-400 dark:hover:border-indigo-500/50 shadow-sm transition group"
                             >
                                 <TechIcon name={skill.icon} className="w-4 h-4" />
                                 <div>
@@ -534,7 +573,7 @@ export default function Welcome() {
 
                     {/* Skill Breakdown Categories */}
                     <div className="grid sm:grid-cols-3 gap-4 pt-2">
-                        <div className="p-4 rounded-xl bg-zinc-50/70 dark:bg-zinc-900/40 border border-zinc-200/70 dark:border-zinc-800/80">
+                        <div className="p-4 rounded-lg bg-zinc-50/70 dark:bg-zinc-900/40 border border-zinc-200/70 dark:border-zinc-800/80">
                             <h4 className="text-xs font-semibold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider mb-2">
                                 Hard Skills
                             </h4>
@@ -543,7 +582,7 @@ export default function Welcome() {
                             </p>
                         </div>
 
-                        <div className="p-4 rounded-xl bg-zinc-50/70 dark:bg-zinc-900/40 border border-zinc-200/70 dark:border-zinc-800/80">
+                        <div className="p-4 rounded-lg bg-zinc-50/70 dark:bg-zinc-900/40 border border-zinc-200/70 dark:border-zinc-800/80">
                             <h4 className="text-xs font-semibold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider mb-2">
                                 Soft Skills
                             </h4>
@@ -552,7 +591,7 @@ export default function Welcome() {
                             </p>
                         </div>
 
-                        <div className="p-4 rounded-xl bg-zinc-50/70 dark:bg-zinc-900/40 border border-zinc-200/70 dark:border-zinc-800/80">
+                        <div className="p-4 rounded-lg bg-zinc-50/70 dark:bg-zinc-900/40 border border-zinc-200/70 dark:border-zinc-800/80">
                             <h4 className="text-xs font-semibold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider mb-2">
                                 Languages
                             </h4>
@@ -585,7 +624,7 @@ export default function Welcome() {
                         {certifications.map((cert, index) => (
                             <div
                                 key={index}
-                                className="p-3.5 rounded-xl border border-zinc-200/80 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/50 hover:border-zinc-300 dark:hover:border-zinc-700 transition flex items-start gap-3 shadow-sm"
+                                className="p-3.5 rounded-lg border border-zinc-200/80 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/50 hover:border-zinc-300 dark:hover:border-zinc-700 transition flex items-start gap-3 shadow-sm"
                             >
                                 <div className="p-2 rounded-lg bg-zinc-50 dark:bg-zinc-800 border border-zinc-200/60 dark:border-zinc-700/60 flex-shrink-0">
                                     <TechIcon name={cert.icon} className="w-4 h-4" />
@@ -621,10 +660,10 @@ export default function Welcome() {
                             href="https://wa.me/qr/OR62X7KAFNBEF1"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/40 hover:bg-emerald-500/5 hover:border-emerald-500/30 transition flex items-center justify-between group"
+                            className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/40 hover:bg-emerald-500/5 hover:border-emerald-500/30 transition flex items-center justify-between group"
                         >
                             <div className="flex items-center gap-3">
-                                <div className="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                                <div className="w-9 h-9 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
                                     <Phone className="w-4 h-4" />
                                 </div>
                                 <div>
@@ -641,10 +680,10 @@ export default function Welcome() {
 
                         <a
                             href="mailto:raflipradipta321@gmail.com"
-                            className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/40 hover:bg-red-500/5 hover:border-red-500/30 transition flex items-center justify-between group"
+                            className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/40 hover:bg-red-500/5 hover:border-red-500/30 transition flex items-center justify-between group"
                         >
                             <div className="flex items-center gap-3">
-                                <div className="w-9 h-9 rounded-xl bg-red-500/10 text-red-600 dark:text-red-400 flex items-center justify-center">
+                                <div className="w-9 h-9 rounded-lg bg-red-500/10 text-red-600 dark:text-red-400 flex items-center justify-center">
                                     <Mail className="w-4 h-4" />
                                 </div>
                                 <div>
@@ -663,11 +702,11 @@ export default function Welcome() {
                             href="https://www.linkedin.com/in/muhammad-rafli-pradipta-45b165288/"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/40 hover:bg-blue-500/5 hover:border-blue-500/30 transition flex items-center justify-between group"
+                            className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/40 hover:bg-blue-500/5 hover:border-blue-500/30 transition flex items-center justify-between group"
                         >
                             <div className="flex items-center gap-3">
-                                <div className="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center">
-                                    <Linkedin className="w-4 h-4" />
+                                <div className="w-9 h-9 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center">
+                                    <TechIcon name="linkedin" className="w-4 h-4 text-[#0A66C2]" />
                                 </div>
                                 <div>
                                     <span className="text-xs font-semibold text-zinc-900 dark:text-zinc-100 block">
@@ -682,13 +721,35 @@ export default function Welcome() {
                         </a>
 
                         <a
+                            href="https://www.instagram.com/rrafli.pd?igsi=MXJrZTJzeTZpeWRiMQ=="
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/40 hover:bg-pink-500/5 hover:border-pink-500/30 transition flex items-center justify-between group"
+                        >
+                            <div className="flex items-center gap-3">
+                                <div className="w-9 h-9 rounded-lg bg-pink-500/10 text-pink-600 dark:text-pink-400 flex items-center justify-center">
+                                    <TechIcon name="instagram" className="w-4 h-4" />
+                                </div>
+                                <div>
+                                    <span className="text-xs font-semibold text-zinc-900 dark:text-zinc-100 block">
+                                        Instagram
+                                    </span>
+                                    <span className="text-xs text-zinc-500">
+                                        @rrafli.pd
+                                    </span>
+                                </div>
+                            </div>
+                            <ArrowUpRight className="w-4 h-4 text-zinc-400 group-hover:text-pink-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition" />
+                        </a>
+
+                        <a
                             href="https://portoraflipradipta.my.canva.site/"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/40 hover:bg-purple-500/5 hover:border-purple-500/30 transition flex items-center justify-between group"
+                            className="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/40 hover:bg-purple-500/5 hover:border-purple-500/30 transition flex items-center justify-between group"
                         >
                             <div className="flex items-center gap-3">
-                                <div className="w-9 h-9 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center">
+                                <div className="w-9 h-9 rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center">
                                     <ExternalLink className="w-4 h-4" />
                                 </div>
                                 <div>

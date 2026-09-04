@@ -29,10 +29,32 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $settings = [];
+        $educations = [];
+        try {
+            if (\Illuminate\Support\Facades\Schema::hasTable('portfolio_settings')) {
+                $settings = \App\Models\PortfolioSetting::getAllAsKeyValue();
+            }
+            if (\Illuminate\Support\Facades\Schema::hasTable('educations')) {
+                $educations = \App\Models\Education::where('is_active', true)
+                    ->orderBy('order', 'asc')
+                    ->orderBy('id', 'desc')
+                    ->get();
+            }
+        } catch (\Throwable $e) {
+            // fallback if DB connection fails
+        }
+
         return [
             ...parent::share($request),
             'auth' => [
                 'user' => $request->user(),
+            ],
+            'portfolio_settings' => $settings,
+            'educations' => $educations,
+            'flash' => [
+                'success' => fn () => $request->session()->get('success'),
+                'error' => fn () => $request->session()->get('error'),
             ],
         ];
     }

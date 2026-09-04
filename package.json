@@ -23,6 +23,8 @@
         "vite": "^7.0.7"
     },
     "dependencies": {
-        "lucide-react": "^1.40.0"
+        "lucide-react": "^1.40.0",
+        "three": "^0.185.1",
+        "threejs-toys": "^0.0.8"
     }
 }

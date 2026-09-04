@@ -1,3 +1,103 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Marquee / Infinite Scroll Carousel */
+@keyframes marquee-left {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+@keyframes marquee-right {
+    0% {
+        transform: translateX(-50%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+.animate-marquee-left {
+    animation: marquee-left 25s linear infinite;
+}
+
+.animate-marquee-right {
+    animation: marquee-right 25s linear infinite;
+}
+
+.marquee-container {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(
+        to right,
+        transparent 0%,
+        black 8%,
+        black 92%,
+        transparent 100%
+    );
+    mask-image: linear-gradient(
+        to right,
+        transparent 0%,
+        black 8%,
+        black 92%,
+        transparent 100%
+    );
+}
+
+.marquee-container:hover .animate-marquee-left,
+.marquee-container:hover .animate-marquee-right {
+    animation-play-state: paused;
+}
+
+/* Guaranteed high-contrast admin input styles */
+.admin-input-dark {
+    background-color: #0c0e17 !important;
+    color: #f8fafc !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+.admin-input-dark::placeholder {
+    color: #64748b !important;
+}
+.admin-input-dark:focus {
+    background-color: #0c0e17 !important;
+    color: #ffffff !important;
+    border-color: #6366f1 !important;
+    outline: none !important;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.35) !important;
+}
+select.admin-input-dark option {
+    background-color: #13151f !important;
+    color: #f8fafc !important;
+}
+
+/* Sleek custom scrollbar */
+.custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(161, 161, 170, 0.3) transparent;
+}
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(161, 161, 170, 0.25);
+    border-radius: 9999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(161, 161, 170, 0.5);
+}
+.dark .custom-scrollbar {
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+}
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
