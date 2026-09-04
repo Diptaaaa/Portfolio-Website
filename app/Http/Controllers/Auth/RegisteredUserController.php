@@ -14,6 +14,8 @@ use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 
+//test
+
 class RegisteredUserController extends Controller
 {
     /**
