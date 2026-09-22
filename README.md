@@ -1,59 +1,154 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🚀 Muhammad Rafli Pradipta — Personal Portfolio & CMS
 
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="https://img.shields.io/badge/Laravel-12.x-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel 12" />
+  <img src="https://img.shields.io/badge/React-19.x-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React 19" />
+  <img src="https://img.shields.io/badge/Inertia.js-2.x-9553E9?style=for-the-badge&logo=inertia&logoColor=white" alt="Inertia.js" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
+  <img src="https://img.shields.io/badge/Vite-7.x-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite" />
+  <img src="https://img.shields.io/badge/PHP-8.2+-777BB4?style=for-the-badge&logo=php&logoColor=white" alt="PHP 8.2+" />
+  <img src="https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge" alt="License MIT" />
 </p>
 
-## About Laravel
+<p align="center">
+  Sebuah website portofolio interaktif modern, berkinerja tinggi, dan terintegrasi dengan <b>Content Management System (CMS)</b> mandiri untuk mengelola profil, proyek analisis data, sertifikasi, pengalaman, dan keahlian teknis.
+</p>
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 📌 Tentang Portofolio
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Website ini dibangun untuk mempresentasikan portofolio profesional **Muhammad Rafli Pradipta** lulusan **Pendidikan Teknologi Informasi** (Universitas Brawijaya, IPK 3.75/4.00). 
 
-## Learning Laravel
+Portofolio ini menggabungkan arsitektur monolitik modern berbasis **Laravel 12** dan **Inertia.js React**, menghadirkan pengalaman Single Page Application (SPA) yang cepat, mulus, dan responsif tanpa kompleksitas API terpisah.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## ✨ Fitur Unggulan
 
-## Laravel Sponsors
+- 🎨 **Modern & Aesthetic UI**: Desain bertema gelap (*Dark Mode*) & terang (*Light Mode*) dengan estetika monokrom modern dan aksen neon aurora.
+- ⚡ **Zero-Lag Micro-Interactions**: Animasi interaktif teks, badge, dan kartu yang dioptimalkan dengan akselerasi GPU (60–120 FPS tanpa layout reflow).
+- 👤 **Interactive Profile Avatar**: Foto profil dilengkapi *ambient glow*, *stationary gradient ring*, *smooth micro-zoom*, *glass shimmer sweep*, dan indikator status *active pulse*.
+- 🛠️ **Full-Featured Admin Dashboard (CMS)**:
+  - **Projects Management**: Tambah, edit, dan hapus studi kasus data analytics, upload media thumbnail & galeri multi-foto.
+  - **Skills & Tech Stack**: Kustomisasi level keahlian (Python, SQL, Tableau, BigQuery, dll.) serta ikon kustom.
+  - **Certifications & Education**: Manajemen rekam jejak akademik, akreditasi, dan bukti sertifikat digital.
+  - **Experience**: Timeline pengalaman profesional, asisten pengajar, dan instruktur IT.
+  - **Site Configuration**: Pengaturan avatar (zoom, pan, kecerahan), bio, kontak WhatsApp, LinkedIn, email, dan link Canva.
+- 📱 **100% Responsif**: Tata letak adaptif sempurna di layar perangkat smartphone, tablet, maupun desktop.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+## 🛠️ Tech Stack & Ekosistem
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+| Lapisan | Teknologi | Deskripsi |
+|---|---|---|
+| **Backend** | [Laravel 12](https://laravel.com/) | PHP Framework untuk routing, autentikasi, ORM Eloquent, dan arsitektur MVC |
+| **Frontend** | [React 19](https://react.dev/) + [Inertia.js](https://inertiajs.com/) | UI library reaktif berbasis komponen tanpa memerlukan REST API decoupling |
+| **Styling** | [Tailwind CSS](https://tailwindcss.com/) | Utility-first CSS framework untuk custom themes & responsivitas presisi |
+| **Icons** | [Lucide React](https://lucide.dev/) | Kumpulan ikon SVG modern dan konsisten |
+| **Database** | MySQL / MariaDB | Penyimpanan relasional terstruktur untuk data proyek, skill, dan konfigurasi |
+| **Bundler** | [Vite 7](https://vitejs.dev/) | Tooling frontend instan untuk HMR (*Hot Module Replacement*) dan build optimasi |
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 💻 Panduan Instalasi Lokal (*Local Development*)
 
-## Code of Conduct
+Jika Anda ingin menjalankan atau mengembangkan website ini di komputer lokal:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 1. Prasyarat
+Pastikan sistem Anda sudah terpasang:
+- PHP >= 8.2
+- Composer
+- Node.js (>= 20.x) & npm
+- MySQL Server
 
-## Security Vulnerabilities
+### 2. Clone Repository
+```bash
+git clone https://github.com/Diptaaaa/Portfolio-Website.git
+cd Portfolio-Website
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 3. Install Dependensi PHP & JavaScript
+```bash
+composer install
+npm install
+```
 
-## License
+### 4. Konfigurasi Lingkungan (`.env`)
+Salin file `.env.example` menjadi `.env`:
+```bash
+cp .env.example .env
+```
+Buka file `.env` dan sesuaikan konfigurasi database Anda:
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=porto
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 5. Generate Application Key & Symlink Storage
+```bash
+php artisan key:generate
+php artisan storage:link
+```
+
+### 6. Jalankan Migrasi Database & Seeder
+```bash
+php artisan migrate --seed
+```
+
+### 7. Jalankan Server Pengembangan
+Jalankan dev server frontend dan backend:
+```bash
+# Terminal 1: Backend Laravel
+php artisan serve
+
+# Terminal 2: Frontend Vite
+npm run dev
+```
+
+Buka peramban di `http://localhost:8000` untuk melihat hasilnya.
+
+---
+
+## 📁 Struktur Direktori Utama
+
+```text
+├── app/
+│   ├── Http/Controllers/    # Controller publik & Admin CMS
+│   └── Models/              # Model Eloquent (Project, Skill, Education, etc.)
+├── database/
+│   ├── migrations/          # Skema database relasional
+│   └── seeders/             # Data awal / dummy portfolio
+├── public/
+│   ├── build/               # Aset produksi hasil build Vite
+│   └── images/              # Logo, sertifikat, dan aset gambar publik
+├── resources/
+│   ├── css/app.css          # Styling kustom, animasi GPU & tema
+│   └── js/
+│       ├── Components/      # Komponen reaktif (Navbar, MediaGallery, dsb.)
+│       ├── Layouts/         # Layout utama Portfolio & Admin
+│       └── Pages/           # Halaman Inertia (Home, Projects, Skills, Admin CMS)
+└── routes/
+    ├── web.php              # Route portfolio publik & dashboard
+    └── auth.php             # Route autentikasi admin
+```
+
+---
+
+## 📬 Kontak & Tautan Profesional
+
+- **Nama**: Muhammad Rafli Pradipta
+- **LinkedIn**: [linkedin.com/in/muhammad-rafli-pradipta](https://linkedin.com/in/muhammad-rafli-pradipta)
+- **Canva Portfolio**: [portoraflipradipta.my.canva.site](https://portoraflipradipta.my.canva.site/)
+- **GitHub**: [github.com/Diptaaaa](https://github.com/Diptaaaa)
+
+---
+
+<p align="center">
+  Dibuat dengan ❤️ dan dedikasi oleh <b>Muhammad Rafli Pradipta</b>
+</p>
