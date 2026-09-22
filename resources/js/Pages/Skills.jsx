@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Head } from '@inertiajs/react';
 import PortfolioLayout from '@/Layouts/PortfolioLayout';
 import TechIcon from '@/Components/TechIcon';
@@ -43,27 +44,27 @@ export default function Skills({
     const displayCategories = skillCategories.length > 0 ? [...skillCategories, ...skillCategories] : [];
 
     return (
-        <PortfolioLayout>
+        <>
             <Head title="Skills & Certifications - Muhammad Rafli Pradipta" />
 
             <div className="space-y-12">
                 {/* Header */}
                 <div>
-                    <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-indigo-500 mb-1">
+                    <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-indigo-500 mb-1 subtitle-interactive">
                         <Award className="w-4 h-4" />
                         <span>Competencies & Credentials</span>
                     </div>
-                    <h1 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+                    <h1 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 heading-interactive">
                         Skills & Certifications
                     </h1>
-                    <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1 leading-relaxed">
+                    <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1 leading-relaxed text-interactive">
                         Technical analytical toolsets, domain competencies, and verified professional certificates.
                     </p>
                 </div>
 
                 {/* Analytical Tools - Marquee Carousel */}
                 <section className="space-y-4">
-                    <h2 className="text-base font-semibold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+                    <h2 className="text-base font-semibold text-zinc-900 dark:text-zinc-100 flex items-center gap-2 heading-interactive">
                         <BarChart3 className="w-4 h-4 text-indigo-500" />
                         <span>Core Tools & Platforms</span>
                     </h2>
@@ -170,7 +171,7 @@ export default function Skills({
                                                 {skillList.map((skill, sIdx) => (
                                                     <span
                                                         key={sIdx}
-                                                        className="px-2.5 py-1 rounded-md text-[11px] font-medium bg-zinc-50 dark:bg-zinc-800/80 text-zinc-700 dark:text-zinc-300 border border-zinc-200/60 dark:border-zinc-700/60"
+                                                        className="px-2.5 py-1 rounded-md text-[11px] font-medium bg-zinc-50 dark:bg-zinc-800/80 text-zinc-700 dark:text-zinc-300 border border-zinc-200/60 dark:border-zinc-700/60 tool-tag badge-interactive"
                                                     >
                                                         {skill}
                                                     </span>
@@ -355,9 +356,9 @@ export default function Skills({
             </div>
 
             {/* Certificate Modal Lightbox */}
-            {selectedCert && (
+            {selectedCert && typeof document !== 'undefined' && createPortal(
                 <div 
-                    className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-zinc-950/80 backdrop-blur-sm animate-in fade-in duration-150"
+                    className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 bg-zinc-950/80 backdrop-blur-sm animate-in fade-in duration-150"
                     onClick={() => setSelectedCert(null)}
                 >
                     <div 
@@ -422,8 +423,11 @@ export default function Skills({
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
-        </PortfolioLayout>
+        </>
     );
 }
+
+Skills.layout = (page) => <PortfolioLayout>{page}</PortfolioLayout>;

@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { Head, useForm, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import TechIcon from '@/Components/TechIcon';
@@ -959,8 +960,8 @@ export default function AdminSkills({
             {/* ══════════════════════════════════════════════════════════════ */}
             {/* MODAL: TAMBAH SERTIFIKAT                                       */}
             {/* ══════════════════════════════════════════════════════════════ */}
-            {isAddCertOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
+            {isAddCertOpen && typeof document !== 'undefined' && createPortal(
+                <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
                     <div className="relative w-full max-w-xl bg-[#13151f] rounded-2xl border border-white/15 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
                         <div className="px-6 py-4 border-b border-white/10 flex items-center justify-between bg-[#1a1d2e]">
                             <h3 className="text-sm font-bold text-white flex items-center gap-2">
@@ -1102,14 +1103,15 @@ export default function AdminSkills({
                             </div>
                         </form>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
 
             {/* ══════════════════════════════════════════════════════════════ */}
             {/* MODAL: EDIT SERTIFIKAT                                         */}
             {/* ══════════════════════════════════════════════════════════════ */}
-            {editingCert && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
+            {editingCert && typeof document !== 'undefined' && createPortal(
+                <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
                     <div className="relative w-full max-w-xl bg-[#13151f] rounded-2xl border border-white/15 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
                         <div className="px-6 py-4 border-b border-white/10 flex items-center justify-between bg-[#1a1d2e]">
                             <h3 className="text-sm font-bold text-white flex items-center gap-2">
@@ -1247,14 +1249,15 @@ export default function AdminSkills({
                             </div>
                         </form>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
 
             {/* ══════════════════════════════════════════════════════════════ */}
             {/* MODAL: TAMBAH CORE TOOL                                        */}
             {/* ══════════════════════════════════════════════════════════════ */}
-            {isAddToolOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
+            {isAddToolOpen && typeof document !== 'undefined' && createPortal(
+                <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
                     <div className="relative w-full max-w-lg bg-[#13151f] rounded-2xl border border-white/15 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
                         <div className="px-6 py-4 border-b border-white/10 flex items-center justify-between bg-[#1a1d2e]">
                             <h3 className="text-sm font-bold text-white flex items-center gap-2">
@@ -1361,14 +1364,15 @@ export default function AdminSkills({
                             </div>
                         </form>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
 
             {/* ══════════════════════════════════════════════════════════════ */}
             {/* MODAL: EDIT CORE TOOL                                          */}
             {/* ══════════════════════════════════════════════════════════════ */}
-            {editingTool && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
+            {editingTool && typeof document !== 'undefined' && createPortal(
+                <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
                     <div className="relative w-full max-w-lg bg-[#13151f] rounded-2xl border border-white/15 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
                         <div className="px-6 py-4 border-b border-white/10 flex items-center justify-between bg-[#1a1d2e]">
                             <h3 className="text-sm font-bold text-white flex items-center gap-2">
@@ -1473,14 +1477,15 @@ export default function AdminSkills({
                             </div>
                         </form>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
 
             {/* ══════════════════════════════════════════════════════════════ */}
             {/* MODAL: TAMBAH KOMPETENSI                                       */}
             {/* ══════════════════════════════════════════════════════════════ */}
-            {isAddCompOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
+            {isAddCompOpen && typeof document !== 'undefined' && createPortal(
+                <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
                     <div className="relative w-full max-w-xl bg-[#13151f] rounded-2xl border border-white/15 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
                         <div className="px-6 py-4 border-b border-white/10 flex items-center justify-between bg-[#1a1d2e]">
                             <h3 className="text-sm font-bold text-white flex items-center gap-2">
@@ -1636,14 +1641,15 @@ export default function AdminSkills({
                             </div>
                         </form>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
 
             {/* ══════════════════════════════════════════════════════════════ */}
             {/* MODAL: EDIT KOMPETENSI                                         */}
             {/* ══════════════════════════════════════════════════════════════ */}
-            {editingComp && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
+            {editingComp && typeof document !== 'undefined' && createPortal(
+                <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
                     <div className="relative w-full max-w-xl bg-[#13151f] rounded-2xl border border-white/15 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
                         <div className="px-6 py-4 border-b border-white/10 flex items-center justify-between bg-[#1a1d2e]">
                             <h3 className="text-sm font-bold text-white flex items-center gap-2">
@@ -1795,14 +1801,15 @@ export default function AdminSkills({
                             </div>
                         </form>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
 
             {/* ══════════════════════════════════════════════════════════════ */}
             {/* DIALOG KONFIRMASI HAPUS SERTIFIKAT                             */}
             {/* ══════════════════════════════════════════════════════════════ */}
-            {deletingCert && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
+            {deletingCert && typeof document !== 'undefined' && createPortal(
+                <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
                     <div className="w-full max-w-md bg-[#13151f] rounded-2xl border border-white/15 p-6 space-y-4 shadow-2xl">
                         <div className="flex items-center gap-3 text-rose-400">
                             <div className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/20">
@@ -1830,14 +1837,15 @@ export default function AdminSkills({
                             </button>
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
 
             {/* ══════════════════════════════════════════════════════════════ */}
             {/* DIALOG KONFIRMASI HAPUS TOOL                                   */}
             {/* ══════════════════════════════════════════════════════════════ */}
-            {deletingTool && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
+            {deletingTool && typeof document !== 'undefined' && createPortal(
+                <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
                     <div className="w-full max-w-md bg-[#13151f] rounded-2xl border border-white/15 p-6 space-y-4 shadow-2xl">
                         <div className="flex items-center gap-3 text-rose-400">
                             <div className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/20">
@@ -1865,14 +1873,15 @@ export default function AdminSkills({
                             </button>
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
 
             {/* ══════════════════════════════════════════════════════════════ */}
             {/* DIALOG KONFIRMASI HAPUS KOMPETENSI                             */}
             {/* ══════════════════════════════════════════════════════════════ */}
-            {deletingComp && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
+            {deletingComp && typeof document !== 'undefined' && createPortal(
+                <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
                     <div className="w-full max-w-md bg-[#13151f] rounded-2xl border border-white/15 p-6 space-y-4 shadow-2xl">
                         <div className="flex items-center gap-3 text-rose-400">
                             <div className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/20">
@@ -1900,15 +1909,16 @@ export default function AdminSkills({
                             </button>
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
 
             {/* ══════════════════════════════════════════════════════════════ */}
             {/* LIGHTBOX PREVIEW MODAL                                         */}
             {/* ══════════════════════════════════════════════════════════════ */}
-            {previewCertImage && (
+            {previewCertImage && typeof document !== 'undefined' && createPortal(
                 <div
-                    className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md animate-in fade-in"
+                    className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md animate-in fade-in"
                     onClick={() => setPreviewCertImage(null)}
                 >
                     <div
@@ -1934,7 +1944,8 @@ export default function AdminSkills({
                             />
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
         </AdminLayout>
     );

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, usePage } from '@inertiajs/react';
+import { Link, usePage, router } from '@inertiajs/react';
 import { 
     Home, 
     BarChart3, 
@@ -16,11 +16,30 @@ import AnimatedCursor from '@/Components/AnimatedCursor';
 export default function PortfolioLayout({ children }) {
     const [theme, setTheme] = useState('light');
     const [showScrollTop, setShowScrollTop] = useState(false);
+    const [isNavigating, setIsNavigating] = useState(false);
     const { url, props } = usePage();
     const settings = props.portfolio_settings || {};
     const authUser = props.auth?.user;
     const isNeonEnabled = settings.enable_neon_cursor !== '0';
     const neonColor = settings.neon_cursor_color || 'magenta';
+
+    useEffect(() => {
+        const unbindStart = router.on('start', () => {
+            setIsNavigating(true);
+        });
+
+        const unbindFinish = router.on('finish', () => {
+            window.scrollTo({ top: 0, behavior: 'instant' });
+            setTimeout(() => {
+                setIsNavigating(false);
+            }, 30);
+        });
+
+        return () => {
+            unbindStart();
+            unbindFinish();
+        };
+    }, []);
 
     useEffect(() => {
         const isDark = document.documentElement.classList.contains('dark') || localStorage.getItem('theme') === 'dark';
@@ -103,8 +122,17 @@ export default function PortfolioLayout({ children }) {
             </header>
 
             {/* Main Centered Content */}
-            <main className="max-w-2xl mx-auto px-6 pt-10 sm:pt-14 pb-36">
-                {children}
+            <main className="max-w-2xl mx-auto px-6 pt-10 sm:pt-14 pb-36 portfolio-content">
+                <div
+                    key={url}
+                    className={
+                        isNavigating
+                            ? 'opacity-0 -translate-y-2.5 scale-[0.985] blur-[1px] transform transition-all duration-200 ease-out'
+                            : 'page-transition'
+                    }
+                >
+                    {children}
+                </div>
             </main>
 
             {/* Bottom Floating Navigation Dock */}

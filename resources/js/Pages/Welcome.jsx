@@ -244,17 +244,37 @@ export default function Welcome() {
                 {/* Profile Header & Contact Info */}
                 <section id="about" className="space-y-6 scroll-mt-24">
                     <header className="flex flex-col sm:flex-row sm:items-center gap-5">
-                        <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 shadow-md flex-shrink-0">
-                            <img
-                                src={settings.avatar_url || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=300&auto=format&fit=crop"}
-                                alt={settings.full_name || "Muhammad Rafli Pradipta"}
-                                className="w-full h-full"
-                                style={getAvatarStyle(settings)}
-                                onError={(e) => {
-                                    e.target.onerror = null;
-                                    e.target.src = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(settings.full_name || 'Rafli Pradipta')}`;
-                                }}
-                            />
+                        {/* Interactive Animated Avatar */}
+                        <div className="relative avatar-group cursor-pointer flex-shrink-0 select-none group/avatar">
+                            {/* Ambient Glow Aura Behind Avatar */}
+                            <div className="absolute -inset-1 rounded-full bg-gradient-to-tr from-indigo-500 via-purple-500 to-cyan-400 opacity-40 blur-md group-hover/avatar:opacity-90 group-hover/avatar:blur-lg transition-all duration-300 pointer-events-none" />
+
+                            {/* Premium Gradient Ring (Non-rotating) */}
+                            <div className="relative p-[2.5px] rounded-full avatar-gradient-ring transition-transform duration-300 ease-out group-hover/avatar:scale-105">
+                                {/* Inner Avatar Frame */}
+                                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden bg-zinc-100 dark:bg-zinc-900 border-2 border-white dark:border-zinc-950 relative shadow-inner">
+                                    <img
+                                        src={settings.avatar_url || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=300&auto=format&fit=crop"}
+                                        alt={settings.full_name || "Muhammad Rafli Pradipta"}
+                                        className="w-full h-full transition-transform duration-500 ease-out group-hover/avatar:scale-105"
+                                        style={getAvatarStyle(settings)}
+                                        onError={(e) => {
+                                            e.target.onerror = null;
+                                            e.target.src = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(settings.full_name || 'Rafli Pradipta')}`;
+                                        }}
+                                    />
+                                    {/* Holographic Light Sheen / Glass Sweep Overlay */}
+                                    <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/35 to-transparent -translate-x-full group-hover/avatar:translate-x-full transition-transform duration-700 ease-in-out pointer-events-none" />
+                                </div>
+                            </div>
+
+                            {/* Active Online Indicator Pulse Badge */}
+                            <span
+                                className="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-zinc-950 shadow-md flex items-center justify-center pointer-events-none transition-transform duration-300 group-hover/avatar:scale-110"
+                                title="Active / Available"
+                            >
+                                <span className="w-2 h-2 rounded-full bg-emerald-200 animate-ping opacity-75" />
+                            </span>
                         </div>
 
                         <div className="space-y-1 flex-1">
@@ -504,14 +524,13 @@ export default function Welcome() {
                         </p>
                     </div>
 
-                    <div className="grid gap-4">
+                    <div className="relative border-l border-zinc-200 dark:border-zinc-800 ml-3 sm:ml-4 space-y-8 pl-6">
                         {organizationalExperiences.map((org, index) => (
-                            <div
-                                key={index}
-                                className="p-5 rounded-lg border border-zinc-200/80 dark:border-zinc-800/80 bg-zinc-50/40 dark:bg-zinc-900/30 space-y-3"
-                            >
-                                <div className="flex items-start justify-between gap-2">
-                                    <div>
+                            <div key={index} className="relative group">
+                                <div className="absolute -left-[31px] top-1 w-3 h-3 rounded-full bg-white dark:bg-zinc-950 border-2 border-indigo-500 group-hover:scale-125 transition-transform" />
+
+                                <div className="space-y-2">
+                                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                                         <div className="flex items-center gap-2">
                                             <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
                                                 {org.role}
@@ -520,20 +539,21 @@ export default function Welcome() {
                                                 {org.badge}
                                             </span>
                                         </div>
-                                        <p className="text-xs text-indigo-600 dark:text-indigo-400 font-medium mt-0.5">
-                                            {org.org}
-                                        </p>
+                                        <span className="text-xs font-mono text-zinc-400 dark:text-zinc-500">
+                                            {org.period}
+                                        </span>
                                     </div>
-                                    <span className="text-xs font-mono text-zinc-500 dark:text-zinc-400">
-                                        {org.period}
-                                    </span>
-                                </div>
 
-                                <ul className="space-y-1.5 text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed list-disc list-outside pl-4 marker:text-zinc-400">
-                                    {org.points.map((p, idx) => (
-                                        <li key={idx}>{p}</li>
-                                    ))}
-                                </ul>
+                                    <div className="text-xs font-medium text-indigo-600 dark:text-indigo-400">
+                                        {org.org}
+                                    </div>
+
+                                    <ul className="space-y-1.5 pt-1 text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed list-disc list-outside pl-4 marker:text-zinc-400">
+                                        {org.points.map((p, idx) => (
+                                            <li key={idx}>{p}</li>
+                                        ))}
+                                    </ul>
+                                </div>
                             </div>
                         ))}
                     </div>

@@ -30,20 +30,20 @@ export default function Contact() {
     };
 
     return (
-        <PortfolioLayout>
+        <>
             <Head title="Contact - Muhammad Rafli Pradipta" />
 
             <div className="space-y-10">
                 {/* Header */}
                 <div>
-                    <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-indigo-500 mb-1">
+                    <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-indigo-500 mb-1 subtitle-interactive">
                         <MessageSquare className="w-4 h-4" />
                         <span>Get in Touch</span>
                     </div>
-                    <h1 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+                    <h1 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 heading-interactive">
                         Let's Connect
                     </h1>
-                    <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1 leading-relaxed">
+                    <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1 leading-relaxed text-interactive">
                         Open to Data Analyst opportunities, educational technology initiatives, or discussing data-driven projects.
                     </p>
                 </div>
@@ -217,6 +217,8 @@ export default function Contact() {
                     </div>
                 </div>
             </div>
-        </PortfolioLayout>
+        </>
     );
 }
+
+Contact.layout = (page) => <PortfolioLayout>{page}</PortfolioLayout>;

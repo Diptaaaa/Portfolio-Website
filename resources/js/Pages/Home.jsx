@@ -91,33 +91,53 @@ export default function Home() {
     ];
 
     return (
-        <PortfolioLayout>
+        <>
             <Head title="Muhammad Rafli Pradipta - Data Analyst & IT Graduate" />
 
             <div className="space-y-12">
                 {/* Profile Header */}
                 <header className="flex flex-col sm:flex-row sm:items-center gap-5">
-                    <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 shadow-md flex-shrink-0">
-                        <img
-                            src={settings.avatar_url || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=300&auto=format&fit=crop"}
-                            alt={settings.full_name || "Muhammad Rafli Pradipta"}
-                            className="w-full h-full"
-                            style={getAvatarStyle(settings)}
-                            onError={(e) => {
-                                e.target.onerror = null;
-                                e.target.src = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(settings.full_name || 'Rafli Pradipta')}`;
-                            }}
-                        />
+                    {/* Interactive Animated Avatar */}
+                    <div className="relative avatar-group cursor-pointer flex-shrink-0 select-none group/avatar">
+                        {/* Ambient Glow Aura Behind Avatar */}
+                        <div className="absolute -inset-1 rounded-full bg-gradient-to-tr from-indigo-500 via-purple-500 to-cyan-400 opacity-40 blur-md group-hover/avatar:opacity-90 group-hover/avatar:blur-lg transition-all duration-300 pointer-events-none" />
+
+                        {/* Premium Gradient Ring (Non-rotating) */}
+                        <div className="relative p-[2.5px] rounded-full avatar-gradient-ring transition-transform duration-300 ease-out group-hover/avatar:scale-105">
+                            {/* Inner Avatar Frame */}
+                            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden bg-zinc-100 dark:bg-zinc-900 border-2 border-white dark:border-zinc-950 relative shadow-inner">
+                                <img
+                                    src={settings.avatar_url || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=300&auto=format&fit=crop"}
+                                    alt={settings.full_name || "Muhammad Rafli Pradipta"}
+                                    className="w-full h-full transition-transform duration-500 ease-out group-hover/avatar:scale-105"
+                                    style={getAvatarStyle(settings)}
+                                    onError={(e) => {
+                                        e.target.onerror = null;
+                                        e.target.src = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(settings.full_name || 'Rafli Pradipta')}`;
+                                    }}
+                                />
+                                {/* Holographic Light Sheen / Glass Sweep Overlay */}
+                                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/35 to-transparent -translate-x-full group-hover/avatar:translate-x-full transition-transform duration-700 ease-in-out pointer-events-none" />
+                            </div>
+                        </div>
+
+                        {/* Active Online Indicator Pulse Badge */}
+                        <span
+                            className="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-zinc-950 shadow-md flex items-center justify-center pointer-events-none transition-transform duration-300 group-hover/avatar:scale-110"
+                            title="Active / Available"
+                        >
+                            <span className="w-2 h-2 rounded-full bg-emerald-200 animate-ping opacity-75" />
+                        </span>
                     </div>
 
                     <div className="space-y-1 flex-1">
-                        <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 uppercase">
+                        <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 uppercase heading-interactive">
                             {settings.full_name || 'Muhammad Rafli Pradipta'}
                         </h1>
-                        <p className="text-sm font-medium text-zinc-600 dark:text-zinc-400">
+                        <p className="text-sm font-medium text-zinc-600 dark:text-zinc-400 subtitle-interactive">
                             {settings.job_title || 'Data Analyst & Information Technology Education Graduate'}
                         </p>
-                        <div className="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400 pt-0.5">
+                        <div className="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400 pt-0.5 text-meta">
                             <MapPin className="w-3.5 h-3.5 text-zinc-400" />
                             <span>{settings.location || 'Malang, East Java, Indonesia'}</span>
                         </div>
@@ -134,7 +154,7 @@ export default function Home() {
                                 href={item.href}
                                 target={item.href.startsWith('http') ? '_blank' : undefined}
                                 rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-zinc-200/90 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-900/60 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-xs font-medium text-zinc-600 dark:text-zinc-300 transition-colors shadow-sm ${item.color}`}
+                                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-zinc-200/90 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-900/60 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-xs font-medium text-zinc-600 dark:text-zinc-300 transition-all shadow-sm badge-interactive ${item.color}`}
                             >
                                 {item.techIcon ? (
                                     <TechIcon name={item.techIcon} className="w-3.5 h-3.5" />
@@ -149,20 +169,18 @@ export default function Home() {
 
                 {/* Profile Summary */}
                 <section className="space-y-3">
-                    <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                    <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 subtitle-interactive">
                         <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
                         <span>{settings.summary_title || 'PROFILE SUMMARY'}</span>
                     </div>
-                    <div className="p-5 rounded-lg bg-zinc-50/70 dark:bg-zinc-900/50 border border-zinc-200/80 dark:border-zinc-800/80">
-                        <p className="text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed font-normal">
-                            {settings.bio_summary || 'Detail-oriented Data Analyst and Information Technology Education graduate (GPA 3.75/4.00) with strong expertise in end-to-end data processing, exploratory analysis, and data visualization. Proficient in Python (Pandas), SQL, and Microsoft Excel to clean complex datasets, query relational databases, and extract actionable business insights. Skilled in leveraging modern AI analytics workflows to optimize data processing pipelines and streamline reporting. Adept at translating complex data findings into data-backed strategic recommendations and communicating effectively with technical and non-technical stakeholders.'}
-                        </p>
-                    </div>
+                    <p className="text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed font-normal text-interactive">
+                        {settings.bio_summary || 'Detail-oriented Data Analyst and Information Technology Education graduate (GPA 3.75/4.00) with strong expertise in end-to-end data processing, exploratory analysis, and data visualization. Proficient in Python (Pandas), SQL, and Microsoft Excel to clean complex datasets, query relational databases, and extract actionable business insights. Skilled in leveraging modern AI analytics workflows to optimize data processing pipelines and streamline reporting. Adept at translating complex data findings into data-backed strategic recommendations and communicating effectively with technical and non-technical stakeholders.'}
+                    </p>
                 </section>
 
                 {/* Education */}
                 <section className="space-y-3">
-                    <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 tracking-tight">
+                    <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 tracking-tight heading-interactive">
                         Education
                     </h2>
 
@@ -174,7 +192,7 @@ export default function Home() {
                                 degree: "Faculty of Computer Science · Bachelor's in IT Education",
                                 period: 'Aug 2022 - Aug 2026',
                                 gpa: 'GPA 3.75 / 4.00',
-                                logo_url: '/images/ub-logo.svg',
+                                logo_url: '/images/ub-logo.png',
                                 coursework: coursework,
                             }
                         ]).map((item, index) => {
@@ -185,30 +203,32 @@ export default function Home() {
                             return (
                                 <div 
                                     key={item.id || index}
-                                    className="p-5 rounded-lg border border-zinc-200/80 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/30 space-y-3 shadow-sm"
+                                    className="p-5 rounded-lg border border-zinc-200/80 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/30 space-y-3 shadow-sm hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors"
                                 >
                                     <div className="flex items-start justify-between gap-2">
                                         <div className="flex items-center gap-3">
                                             <img
-                                                src={item.logo_url || "/images/ub-logo.svg"}
+                                                src={item.logo_url || "/images/ub-logo.png"}
                                                 alt={`Logo ${item.institution}`}
                                                 className="w-10 h-10 object-contain flex-shrink-0"
+                                                loading="lazy"
+                                                decoding="async"
                                                 onError={(e) => {
                                                     e.target.onerror = null;
-                                                    e.target.src = "https://upload.wikimedia.org/wikipedia/commons/b/bb/Logo_Universitas_Brawijaya.svg";
+                                                    e.target.src = "/images/ub-logo.png";
                                                 }}
                                             />
                                             <div>
-                                                <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+                                                <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 heading-interactive">
                                                     {item.institution}
                                                 </h3>
-                                                <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                                                <p className="text-xs text-zinc-500 dark:text-zinc-400 subtitle-interactive">
                                                     {item.degree}
                                                 </p>
                                             </div>
                                         </div>
                                         <div className="text-right">
-                                            <span className="text-xs font-mono text-zinc-500 dark:text-zinc-400 block">
+                                            <span className="text-xs font-mono text-zinc-500 dark:text-zinc-400 block text-meta">
                                                 {item.period}
                                             </span>
                                             {item.gpa && (
@@ -221,14 +241,14 @@ export default function Home() {
 
                                     {courses.length > 0 && (
                                         <div className="pt-2 border-t border-zinc-100 dark:border-zinc-800/60">
-                                            <span className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 block mb-2">
+                                            <span className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 block mb-2 text-meta">
                                                 Relevant Coursework:
                                             </span>
                                             <div className="flex flex-wrap gap-1.5">
                                                 {courses.map((course, idx) => (
                                                     <span
                                                         key={idx}
-                                                        className="text-[11px] px-2.5 py-1 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-medium"
+                                                        className="text-[11px] px-2.5 py-1 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-medium coursework-tag border border-transparent"
                                                     >
                                                         {course}
                                                     </span>
@@ -277,6 +297,8 @@ export default function Home() {
                     </div>
                 </section>
             </div>
-        </PortfolioLayout>
+        </>
     );
 }
+
+Home.layout = (page) => <PortfolioLayout>{page}</PortfolioLayout>;

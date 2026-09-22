@@ -1,4 +1,5 @@
 import { useState, useRef, useMemo, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Head, useForm, usePage, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import {
@@ -416,6 +417,179 @@ function CategorySelectInput({ value, onChange, projects = [] }) {
     );
 }
 
+/* ── Shared Modal Form ───────────────────────────────────────── */
+const formInputCls = 'admin-input-dark w-full !bg-[#0c0e17] !text-white !border-white/15 rounded-xl px-3.5 py-2.5 text-sm placeholder-zinc-500 focus:!border-indigo-500 focus:!ring-2 focus:!ring-indigo-500/30 transition';
+const formLabelCls = 'block text-xs font-semibold text-zinc-200 mb-1.5';
+
+function ProjectForm({ form, onSubmit, onClose, isEdit = false, projects = [] }) {
+    return (
+        <form onSubmit={onSubmit} className="space-y-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="sm:col-span-2">
+                    <label className={formLabelCls}>Judul Proyek *</label>
+                    <input
+                        type="text"
+                        className={formInputCls}
+                        value={form.data.title}
+                        onChange={(e) => form.setData('title', e.target.value)}
+                        placeholder="Contoh: Cyclistic Bike-Share: Maximizing Annual Memberships"
+                        required
+                    />
+                    {form.errors.title && <p className="text-rose-400 text-xs mt-1">{form.errors.title}</p>}
+                </div>
+
+                <div>
+                    <label className={formLabelCls}>Subtitle / Institusi</label>
+                    <input
+                        type="text"
+                        className={formInputCls}
+                        value={form.data.subtitle}
+                        onChange={(e) => form.setData('subtitle', e.target.value)}
+                        placeholder="Contoh: Google Capstone Project"
+                    />
+                </div>
+
+                <CategorySelectInput
+                    value={form.data.category}
+                    onChange={(val) => form.setData('category', val)}
+                    projects={projects}
+                />
+
+                <div>
+                    <label className={formLabelCls}>Periode</label>
+                    <input
+                        type="text"
+                        className={formInputCls}
+                        value={form.data.period}
+                        onChange={(e) => form.setData('period', e.target.value)}
+                        placeholder="Contoh: Aug 2026 atau Jun 2025 - Sekarang"
+                    />
+                </div>
+
+                <div>
+                    <label className={formLabelCls}>Badge Label</label>
+                    <input
+                        type="text"
+                        className={formInputCls}
+                        value={form.data.badge}
+                        onChange={(e) => form.setData('badge', e.target.value)}
+                        placeholder="Contoh: Google Capstone atau Featured"
+                    />
+                </div>
+
+                <div>
+                    <label className={formLabelCls}>Metrik Singkat</label>
+                    <input
+                        type="text"
+                        className={formInputCls}
+                        value={form.data.metrics}
+                        onChange={(e) => form.setData('metrics', e.target.value)}
+                        placeholder="Contoh: 5.5M+ Records atau 1,200+ Active Users"
+                    />
+                </div>
+
+                <div>
+                    <label className={formLabelCls}>URL Tautan (opsional)</label>
+                    <input
+                        type="url"
+                        className={formInputCls}
+                        value={form.data.link_url}
+                        onChange={(e) => form.setData('link_url', e.target.value)}
+                        placeholder="https://github.com/... atau https://..."
+                    />
+                </div>
+
+                <div>
+                    <label className={formLabelCls}>Urutan Tampilan</label>
+                    <input
+                        type="number"
+                        className={formInputCls}
+                        value={form.data.order}
+                        onChange={(e) => form.setData('order', parseInt(e.target.value) || 1)}
+                        min="1"
+                    />
+                </div>
+
+                <div className="sm:col-span-2">
+                    <label className={formLabelCls}>
+                        Poin Deskripsi <span className="font-normal text-zinc-400">(satu baris = satu poin bullet)</span>
+                    </label>
+                    <textarea
+                        className={formInputCls + ' resize-y min-h-[110px]'}
+                        value={form.data.points}
+                        onChange={(e) => form.setData('points', e.target.value)}
+                        placeholder={"Poin pertama deskripsi proyek...\nPoin kedua capaian & metodologi...\nPoin ketiga hasil & dampak..."}
+                        rows={4}
+                    />
+                </div>
+
+                <div className="sm:col-span-2">
+                    <label className={formLabelCls}>
+                        Tools / Teknologi <span className="font-normal text-zinc-400">(pisahkan dengan koma)</span>
+                    </label>
+                    <input
+                        type="text"
+                        className={formInputCls}
+                        value={form.data.tools}
+                        onChange={(e) => form.setData('tools', e.target.value)}
+                        placeholder="Python (Pandas), SQL, Tableau, React, Docker"
+                    />
+                </div>
+
+                {/* Gallery Manager Section */}
+                <div className="sm:col-span-2 pt-2 border-t border-white/10">
+                    <ProjectGalleryManager
+                        images={form.data.images || []}
+                        onChange={(imgs) => form.setData('images', imgs)}
+                    />
+                </div>
+
+                <div className="sm:col-span-2 pt-2">
+                    <label className="flex items-center gap-3 cursor-pointer select-none">
+                        <div
+                            onClick={() => form.setData('is_active', !form.data.is_active)}
+                            className={`w-11 h-6 rounded-full flex items-center px-0.5 transition-colors cursor-pointer ${form.data.is_active ? 'bg-indigo-600' : 'bg-zinc-700'}`}
+                        >
+                            <span className={`w-5 h-5 rounded-full bg-white shadow-sm transition-transform ${form.data.is_active ? 'translate-x-5' : 'translate-x-0'}`} />
+                        </div>
+                        <div>
+                            <span className="text-sm font-medium text-zinc-200">Tampilkan di website publik</span>
+                            <p className="text-[11px] text-zinc-500">Jika dinonaktifkan, proyek ini hanya terlihat oleh admin.</p>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div className="flex justify-end gap-3 pt-4 border-t border-white/10">
+                <button
+                    type="button"
+                    onClick={onClose}
+                    className="px-4 py-2.5 rounded-xl text-sm font-medium text-zinc-300 hover:text-white hover:bg-zinc-800 transition"
+                >
+                    Batal
+                </button>
+                <button
+                    type="submit"
+                    disabled={form.processing}
+                    className="px-6 py-2.5 rounded-xl text-sm font-semibold bg-indigo-600 hover:bg-indigo-500 text-white transition flex items-center gap-2 shadow-lg shadow-indigo-600/20 disabled:opacity-60"
+                >
+                    {form.processing ? (
+                        <>
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            <span>Menyimpan ke database…</span>
+                        </>
+                    ) : (
+                        <>
+                            <Check className="w-4 h-4" />
+                            <span>{isEdit ? 'Simpan Perubahan' : 'Tambah Proyek'}</span>
+                        </>
+                    )}
+                </button>
+            </div>
+        </form>
+    );
+}
+
 /* ── Main Admin Projects Page ────────────────────────────────── */
 export default function Projects({ projects = [] }) {
     const { flash } = usePage().props;
@@ -498,177 +672,7 @@ export default function Projects({ projects = [] }) {
         general: 'text-zinc-400 bg-zinc-500/10 border-zinc-500/20',
     };
 
-    /* ── high-contrast styling constants ─────────────── */
-    const inputCls = 'admin-input-dark w-full !bg-[#0c0e17] !text-white !border-white/15 rounded-xl px-3.5 py-2.5 text-sm placeholder-zinc-500 focus:!border-indigo-500 focus:!ring-2 focus:!ring-indigo-500/30 transition';
-    const labelCls = 'block text-xs font-semibold text-zinc-200 mb-1.5';
 
-    /* ── shared modal form ───────────────────────────── */
-    const ProjectForm = ({ form, onSubmit, onClose, isEdit = false }) => (
-        <form onSubmit={onSubmit} className="space-y-5">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="sm:col-span-2">
-                    <label className={labelCls}>Judul Proyek *</label>
-                    <input
-                        type="text"
-                        className={inputCls}
-                        value={form.data.title}
-                        onChange={(e) => form.setData('title', e.target.value)}
-                        placeholder="Contoh: Cyclistic Bike-Share: Maximizing Annual Memberships"
-                        required
-                    />
-                    {form.errors.title && <p className="text-rose-400 text-xs mt-1">{form.errors.title}</p>}
-                </div>
-
-                <div>
-                    <label className={labelCls}>Subtitle / Institusi</label>
-                    <input
-                        type="text"
-                        className={inputCls}
-                        value={form.data.subtitle}
-                        onChange={(e) => form.setData('subtitle', e.target.value)}
-                        placeholder="Contoh: Google Capstone Project"
-                    />
-                </div>
-
-                <CategorySelectInput
-                    value={form.data.category}
-                    onChange={(val) => form.setData('category', val)}
-                    projects={projects}
-                />
-
-                <div>
-                    <label className={labelCls}>Periode</label>
-                    <input
-                        type="text"
-                        className={inputCls}
-                        value={form.data.period}
-                        onChange={(e) => form.setData('period', e.target.value)}
-                        placeholder="Contoh: Aug 2026 atau Jun 2025 - Sekarang"
-                    />
-                </div>
-
-                <div>
-                    <label className={labelCls}>Badge Label</label>
-                    <input
-                        type="text"
-                        className={inputCls}
-                        value={form.data.badge}
-                        onChange={(e) => form.setData('badge', e.target.value)}
-                        placeholder="Contoh: Google Capstone atau Featured"
-                    />
-                </div>
-
-                <div>
-                    <label className={labelCls}>Metrik Singkat</label>
-                    <input
-                        type="text"
-                        className={inputCls}
-                        value={form.data.metrics}
-                        onChange={(e) => form.setData('metrics', e.target.value)}
-                        placeholder="Contoh: 5.5M+ Records atau 1,200+ Active Users"
-                    />
-                </div>
-
-                <div>
-                    <label className={labelCls}>URL Tautan (opsional)</label>
-                    <input
-                        type="url"
-                        className={inputCls}
-                        value={form.data.link_url}
-                        onChange={(e) => form.setData('link_url', e.target.value)}
-                        placeholder="https://github.com/... atau https://..."
-                    />
-                </div>
-
-                <div>
-                    <label className={labelCls}>Urutan Tampilan</label>
-                    <input
-                        type="number"
-                        className={inputCls}
-                        value={form.data.order}
-                        onChange={(e) => form.setData('order', parseInt(e.target.value) || 1)}
-                        min="1"
-                    />
-                </div>
-
-                <div className="sm:col-span-2">
-                    <label className={labelCls}>
-                        Poin Deskripsi <span className="font-normal text-zinc-400">(satu baris = satu poin bullet)</span>
-                    </label>
-                    <textarea
-                        className={inputCls + ' resize-y min-h-[110px]'}
-                        value={form.data.points}
-                        onChange={(e) => form.setData('points', e.target.value)}
-                        placeholder={"Poin pertama deskripsi proyek...\nPoin kedua capaian & metodologi...\nPoin ketiga hasil & dampak..."}
-                        rows={4}
-                    />
-                </div>
-
-                <div className="sm:col-span-2">
-                    <label className={labelCls}>
-                        Tools / Teknologi <span className="font-normal text-zinc-400">(pisahkan dengan koma)</span>
-                    </label>
-                    <input
-                        type="text"
-                        className={inputCls}
-                        value={form.data.tools}
-                        onChange={(e) => form.setData('tools', e.target.value)}
-                        placeholder="Python (Pandas), SQL, Tableau, React, Docker"
-                    />
-                </div>
-
-                {/* Gallery Manager Section */}
-                <div className="sm:col-span-2 pt-2 border-t border-white/10">
-                    <ProjectGalleryManager
-                        images={form.data.images || []}
-                        onChange={(imgs) => form.setData('images', imgs)}
-                    />
-                </div>
-
-                <div className="sm:col-span-2 pt-2">
-                    <label className="flex items-center gap-3 cursor-pointer select-none">
-                        <div
-                            onClick={() => form.setData('is_active', !form.data.is_active)}
-                            className={`w-11 h-6 rounded-full flex items-center px-0.5 transition-colors cursor-pointer ${form.data.is_active ? 'bg-indigo-600' : 'bg-zinc-700'}`}
-                        >
-                            <span className={`w-5 h-5 rounded-full bg-white shadow-sm transition-transform ${form.data.is_active ? 'translate-x-5' : 'translate-x-0'}`} />
-                        </div>
-                        <div>
-                            <span className="text-sm font-medium text-zinc-200">Tampilkan di website publik</span>
-                            <p className="text-[11px] text-zinc-500">Jika dinonaktifkan, proyek ini hanya terlihat oleh admin.</p>
-                        </div>
-                    </label>
-                </div>
-            </div>
-
-            <div className="flex justify-end gap-3 pt-4 border-t border-white/10">
-                <button
-                    type="button"
-                    onClick={onClose}
-                    className="px-4 py-2.5 rounded-xl text-sm font-medium text-zinc-300 hover:text-white hover:bg-zinc-800 transition"
-                >
-                    Batal
-                </button>
-                <button
-                    type="submit"
-                    disabled={form.processing}
-                    className="px-6 py-2.5 rounded-xl text-sm font-semibold bg-indigo-600 hover:bg-indigo-500 text-white transition flex items-center gap-2 shadow-lg shadow-indigo-600/20 disabled:opacity-60"
-                >
-                    {form.processing ? (
-                        <>
-                            <Loader2 className="w-4 h-4 animate-spin" />
-                            <span>Menyimpan ke database…</span>
-                        </>
-                    ) : (
-                        <>
-                            <Check className="w-4 h-4" />
-                            <span>{isEdit ? 'Simpan Perubahan' : 'Tambah Proyek'}</span>
-                        </>
-                    )}
-                </button>
-            </div>
-        </form>
-    );
 
     return (
         <AdminLayout title="Project Experience">
@@ -858,8 +862,8 @@ export default function Projects({ projects = [] }) {
             </div>
 
             {/* ── CREATE MODAL ────────────────────────────── */}
-            {isCreateModalOpen && (
-                <div className="fixed inset-0 z-50 flex items-start justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
+            {isCreateModalOpen && typeof document !== 'undefined' && createPortal(
+                <div className="fixed inset-0 z-[9999] flex items-start justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
                     <div className="bg-[#13151f] border border-white/15 rounded-2xl shadow-2xl w-full max-w-2xl my-8 overflow-hidden">
                         <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-[#171a27]">
                             <div className="flex items-center gap-2 text-zinc-100 font-bold">
@@ -880,15 +884,17 @@ export default function Projects({ projects = [] }) {
                                 form={createForm}
                                 onSubmit={handleCreate}
                                 onClose={() => setIsCreateModalOpen(false)}
+                                projects={projects}
                             />
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
 
             {/* ── EDIT MODAL ──────────────────────────────── */}
-            {editingProject && (
-                <div className="fixed inset-0 z-50 flex items-start justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
+            {editingProject && typeof document !== 'undefined' && createPortal(
+                <div className="fixed inset-0 z-[9999] flex items-start justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
                     <div className="bg-[#13151f] border border-white/15 rounded-2xl shadow-2xl w-full max-w-2xl my-8 overflow-hidden">
                         <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-[#171a27]">
                             <div className="flex items-center gap-2 text-zinc-100 font-bold">
@@ -910,15 +916,17 @@ export default function Projects({ projects = [] }) {
                                 onSubmit={handleEdit}
                                 onClose={() => setEditingProject(null)}
                                 isEdit
+                                projects={projects}
                             />
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
 
             {/* ── DELETE CONFIRMATION MODAL ───────────────── */}
-            {deletingProject && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+            {deletingProject && typeof document !== 'undefined' && createPortal(
+                <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
                     <div className="bg-[#13151f] border border-white/15 rounded-2xl shadow-2xl w-full max-w-sm p-6 space-y-4">
                         <div className="flex items-center gap-3 text-rose-400">
                             <div className="w-10 h-10 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center">
@@ -947,7 +955,8 @@ export default function Projects({ projects = [] }) {
                             </button>
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
         </AdminLayout>
     );

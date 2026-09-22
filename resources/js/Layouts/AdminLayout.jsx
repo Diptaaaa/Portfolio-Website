@@ -68,6 +68,7 @@ const navItems = [
 /* ─── Main Layout ───────────────────────────────────────────── */
 export default function AdminLayout({ children, title }) {
     const { auth } = usePage().props;
+    const { url } = usePage();
     const user = auth?.user;
 
     const [sidebarOpen, setSidebarOpen]   = useState(true);
@@ -361,7 +362,9 @@ export default function AdminLayout({ children, title }) {
 
                 {/* ── Page Content ───────────────────────────── */}
                 <main className="flex-1 overflow-y-auto">
-                    {children}
+                    <div key={url} className="page-transition min-h-full">
+                        {children}
+                    </div>
                 </main>
             </div>
         </div>

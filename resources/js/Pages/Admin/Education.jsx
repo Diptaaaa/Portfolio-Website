@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { Head, useForm, usePage, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import {
@@ -403,8 +404,8 @@ export default function Education({ educations = [] }) {
             {/* ═════════════════════════════════════════════════════════
                 MODAL: TAMBAH PENDIDIKAN BARU
             ═════════════════════════════════════════════════════════ */}
-            {isCreateModalOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn">
+            {isCreateModalOpen && typeof document !== 'undefined' && createPortal(
+                <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn">
                     <div
                         className="w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-2xl bg-[#1a1d2e] border border-white/10 shadow-2xl animate-scaleUp"
                         onClick={(e) => e.stopPropagation()}
@@ -598,14 +599,15 @@ export default function Education({ educations = [] }) {
                             </div>
                         </form>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
 
             {/* ═════════════════════════════════════════════════════════
                 MODAL: EDIT PENDIDIKAN
             ═════════════════════════════════════════════════════════ */}
-            {editingEducation && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn">
+            {editingEducation && typeof document !== 'undefined' && createPortal(
+                <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn">
                     <div
                         className="w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-2xl bg-[#1a1d2e] border border-white/10 shadow-2xl animate-scaleUp"
                         onClick={(e) => e.stopPropagation()}
@@ -793,14 +795,15 @@ export default function Education({ educations = [] }) {
                             </div>
                         </form>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
 
             {/* ═════════════════════════════════════════════════════════
                 MODAL: KONFIRMASI HAPUS PENDIDIKAN
             ═════════════════════════════════════════════════════════ */}
-            {deletingEducation && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn">
+            {deletingEducation && typeof document !== 'undefined' && createPortal(
+                <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn">
                     <div
                         className="w-full max-w-sm rounded-2xl bg-[#1a1d2e] border border-white/10 shadow-2xl p-6 text-center animate-scaleUp"
                         onClick={(e) => e.stopPropagation()}
@@ -833,7 +836,8 @@ export default function Education({ educations = [] }) {
                             </button>
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
         </AdminLayout>
     );

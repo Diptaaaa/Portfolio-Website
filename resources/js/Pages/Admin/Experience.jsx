@@ -1,4 +1,5 @@
 import { useState, useRef, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import { Head, useForm, usePage, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import {
@@ -307,6 +308,193 @@ function ExperienceGalleryManager({ images = [], onChange }) {
     );
 }
 
+/* ── Shared Modal Form ───────────────────────────────────────── */
+const formInputCls = 'admin-input-dark w-full !bg-[#0c0e17] !text-white !border-white/15 rounded-xl px-3.5 py-2.5 text-sm placeholder-zinc-500 focus:!border-indigo-500 focus:!ring-2 focus:!ring-indigo-500/30 transition';
+const formLabelCls = 'block text-xs font-semibold text-zinc-200 mb-1.5';
+
+function ExperienceForm({ form, onSubmit, onClose, isEdit = false }) {
+    return (
+        <form onSubmit={onSubmit} className="space-y-5">
+            {/* Tipe Pengalaman Selector */}
+            <div className="space-y-2">
+                <label className={formLabelCls}>Tipe Pengalaman *</label>
+                <div className="grid grid-cols-2 gap-3">
+                    <button
+                        type="button"
+                        onClick={() => form.setData('type', 'work')}
+                        className={`flex items-center gap-2.5 p-3 rounded-xl border text-left transition ${
+                            form.data.type === 'work'
+                                ? 'border-indigo-500 bg-indigo-500/20 text-white ring-1 ring-indigo-500'
+                                : 'border-white/10 bg-[#0c0e17] text-zinc-400 hover:bg-white/5 hover:text-zinc-200'
+                        }`}
+                    >
+                        <Building2 className={`w-5 h-5 ${form.data.type === 'work' ? 'text-indigo-400' : 'text-zinc-500'}`} />
+                        <div>
+                            <div className="text-xs font-bold text-white">Pengalaman Kerja</div>
+                            <div className="text-[10px] text-zinc-400">Professional Work</div>
+                        </div>
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={() => form.setData('type', 'organization')}
+                        className={`flex items-center gap-2.5 p-3 rounded-xl border text-left transition ${
+                            form.data.type === 'organization'
+                                ? 'border-indigo-500 bg-indigo-500/20 text-white ring-1 ring-indigo-500'
+                                : 'border-white/10 bg-[#0c0e17] text-zinc-400 hover:bg-white/5 hover:text-zinc-200'
+                        }`}
+                    >
+                        <Users2 className={`w-5 h-5 ${form.data.type === 'organization' ? 'text-indigo-400' : 'text-zinc-500'}`} />
+                        <div>
+                            <div className="text-xs font-bold text-white">Organisasi & Kepemimpinan</div>
+                            <div className="text-[10px] text-zinc-400">Leadership & Community</div>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label className={formLabelCls}>
+                        {form.data.type === 'work' ? 'Nama Perusahaan / Sekolah *' : 'Nama Organisasi / Komunitas *'}
+                    </label>
+                    <input
+                        type="text"
+                        className={formInputCls}
+                        value={form.data.company}
+                        onChange={(e) => form.setData('company', e.target.value)}
+                        placeholder={form.data.type === 'work' ? 'Contoh: Brawijaya Smart School (BSS)' : 'Contoh: Asrama Banua Malang'}
+                        required
+                    />
+                    {form.errors.company && <p className="text-rose-400 text-xs mt-1">{form.errors.company}</p>}
+                </div>
+
+                <div>
+                    <label className={formLabelCls}>Posisi / Jabatan (Role) *</label>
+                    <input
+                        type="text"
+                        className={formInputCls}
+                        value={form.data.role}
+                        onChange={(e) => form.setData('role', e.target.value)}
+                        placeholder={form.data.type === 'work' ? 'Contoh: Teacher Intern – Informatics' : 'Contoh: Dormitory President'}
+                        required
+                    />
+                    {form.errors.role && <p className="text-rose-400 text-xs mt-1">{form.errors.role}</p>}
+                </div>
+
+                <div>
+                    <label className={formLabelCls}>Periode Waktu</label>
+                    <input
+                        type="text"
+                        className={formInputCls}
+                        value={form.data.period}
+                        onChange={(e) => form.setData('period', e.target.value)}
+                        placeholder="Contoh: Aug - Oct 2025 atau Jan 2024 - Present"
+                    />
+                </div>
+
+                <div>
+                    <label className={formLabelCls}>Lokasi</label>
+                    <input
+                        type="text"
+                        className={formInputCls}
+                        value={form.data.location}
+                        onChange={(e) => form.setData('location', e.target.value)}
+                        placeholder="Contoh: Malang, East Java"
+                    />
+                </div>
+
+                <div>
+                    <label className={formLabelCls}>
+                        Badge Label {form.data.type === 'organization' ? '(Disarankan)' : '(Opsional)'}
+                    </label>
+                    <input
+                        type="text"
+                        className={formInputCls}
+                        value={form.data.badge}
+                        onChange={(e) => form.setData('badge', e.target.value)}
+                        placeholder="Contoh: Executive Leadership atau Media Outreach"
+                    />
+                </div>
+
+                <div>
+                    <label className={formLabelCls}>Urutan Tampilan</label>
+                    <input
+                        type="number"
+                        className={formInputCls}
+                        value={form.data.order}
+                        onChange={(e) => form.setData('order', parseInt(e.target.value) || 1)}
+                        min="1"
+                    />
+                </div>
+
+                <div className="sm:col-span-2">
+                    <label className={formLabelCls}>
+                        Poin Deskripsi & Pencapaian <span className="font-normal text-zinc-400">(satu baris = satu poin bullet)</span>
+                    </label>
+                    <textarea
+                        className={formInputCls + ' resize-y min-h-[110px]'}
+                        value={form.data.points}
+                        onChange={(e) => form.setData('points', e.target.value)}
+                        placeholder={"Poin pertama deskripsi tanggung jawab & program...\nPoin kedua pencapaian terukur & teknologi yang digunakan...\nPoin ketiga hasil & dampak positif..."}
+                        rows={4}
+                    />
+                </div>
+
+                {/* Gallery Manager */}
+                <div className="sm:col-span-2 pt-2 border-t border-white/10">
+                    <ExperienceGalleryManager
+                        images={form.data.images || []}
+                        onChange={(imgs) => form.setData('images', imgs)}
+                    />
+                </div>
+
+                <div className="sm:col-span-2 pt-2">
+                    <label className="flex items-center gap-3 cursor-pointer select-none">
+                        <div
+                            onClick={() => form.setData('is_active', !form.data.is_active)}
+                            className={`w-11 h-6 rounded-full flex items-center px-0.5 transition-colors cursor-pointer ${form.data.is_active ? 'bg-indigo-600' : 'bg-zinc-700'}`}
+                        >
+                            <span className={`w-5 h-5 rounded-full bg-white shadow-sm transition-transform ${form.data.is_active ? 'translate-x-5' : 'translate-x-0'}`} />
+                        </div>
+                        <div>
+                            <span className="text-sm font-medium text-zinc-200">Tampilkan di website publik</span>
+                            <p className="text-[11px] text-zinc-500">Jika dinonaktifkan, pengalaman ini hanya terlihat di panel admin.</p>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div className="flex justify-end gap-3 pt-4 border-t border-white/10">
+                <button
+                    type="button"
+                    onClick={onClose}
+                    className="px-4 py-2.5 rounded-xl text-sm font-medium text-zinc-300 hover:text-white hover:bg-zinc-800 transition"
+                >
+                    Batal
+                </button>
+                <button
+                    type="submit"
+                    disabled={form.processing}
+                    className="px-6 py-2.5 rounded-xl text-sm font-semibold bg-indigo-600 hover:bg-indigo-500 text-white transition flex items-center gap-2 shadow-lg shadow-indigo-600/20 disabled:opacity-60"
+                >
+                    {form.processing ? (
+                        <>
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            <span>Menyimpan ke database…</span>
+                        </>
+                    ) : (
+                        <>
+                            <Check className="w-4 h-4" />
+                            <span>{isEdit ? 'Simpan Perubahan' : 'Tambah Pengalaman'}</span>
+                        </>
+                    )}
+                </button>
+            </div>
+        </form>
+    );
+}
+
 /* ── Main Experience Page ────────────────────────────────────── */
 export default function ExperiencePage({ experiences = [] }) {
     const { flash } = usePage().props;
@@ -401,191 +589,7 @@ export default function ExperiencePage({ experiences = [] }) {
         });
     };
 
-    /* ── high-contrast styling constants ─────────────── */
-    const inputCls = 'admin-input-dark w-full !bg-[#0c0e17] !text-white !border-white/15 rounded-xl px-3.5 py-2.5 text-sm placeholder-zinc-500 focus:!border-indigo-500 focus:!ring-2 focus:!ring-indigo-500/30 transition';
-    const labelCls = 'block text-xs font-semibold text-zinc-200 mb-1.5';
 
-    /* ── shared modal form ───────────────────────────── */
-    const ExperienceForm = ({ form, onSubmit, onClose, isEdit = false }) => (
-        <form onSubmit={onSubmit} className="space-y-5">
-            {/* Tipe Pengalaman Selector */}
-            <div className="space-y-2">
-                <label className={labelCls}>Tipe Pengalaman *</label>
-                <div className="grid grid-cols-2 gap-3">
-                    <button
-                        type="button"
-                        onClick={() => form.setData('type', 'work')}
-                        className={`flex items-center gap-2.5 p-3 rounded-xl border text-left transition ${
-                            form.data.type === 'work'
-                                ? 'border-indigo-500 bg-indigo-500/20 text-white ring-1 ring-indigo-500'
-                                : 'border-white/10 bg-[#0c0e17] text-zinc-400 hover:bg-white/5 hover:text-zinc-200'
-                        }`}
-                    >
-                        <Building2 className={`w-5 h-5 ${form.data.type === 'work' ? 'text-indigo-400' : 'text-zinc-500'}`} />
-                        <div>
-                            <div className="text-xs font-bold text-white">Pengalaman Kerja</div>
-                            <div className="text-[10px] text-zinc-400">Professional Work</div>
-                        </div>
-                    </button>
-
-                    <button
-                        type="button"
-                        onClick={() => form.setData('type', 'organization')}
-                        className={`flex items-center gap-2.5 p-3 rounded-xl border text-left transition ${
-                            form.data.type === 'organization'
-                                ? 'border-indigo-500 bg-indigo-500/20 text-white ring-1 ring-indigo-500'
-                                : 'border-white/10 bg-[#0c0e17] text-zinc-400 hover:bg-white/5 hover:text-zinc-200'
-                        }`}
-                    >
-                        <Users2 className={`w-5 h-5 ${form.data.type === 'organization' ? 'text-indigo-400' : 'text-zinc-500'}`} />
-                        <div>
-                            <div className="text-xs font-bold text-white">Organisasi & Kepemimpinan</div>
-                            <div className="text-[10px] text-zinc-400">Leadership & Community</div>
-                        </div>
-                    </button>
-                </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                    <label className={labelCls}>
-                        {form.data.type === 'work' ? 'Nama Perusahaan / Sekolah *' : 'Nama Organisasi / Komunitas *'}
-                    </label>
-                    <input
-                        type="text"
-                        className={inputCls}
-                        value={form.data.company}
-                        onChange={(e) => form.setData('company', e.target.value)}
-                        placeholder={form.data.type === 'work' ? 'Contoh: Brawijaya Smart School (BSS)' : 'Contoh: Asrama Banua Malang'}
-                        required
-                    />
-                    {form.errors.company && <p className="text-rose-400 text-xs mt-1">{form.errors.company}</p>}
-                </div>
-
-                <div>
-                    <label className={labelCls}>Posisi / Jabatan (Role) *</label>
-                    <input
-                        type="text"
-                        className={inputCls}
-                        value={form.data.role}
-                        onChange={(e) => form.setData('role', e.target.value)}
-                        placeholder={form.data.type === 'work' ? 'Contoh: Teacher Intern – Informatics' : 'Contoh: Dormitory President'}
-                        required
-                    />
-                    {form.errors.role && <p className="text-rose-400 text-xs mt-1">{form.errors.role}</p>}
-                </div>
-
-                <div>
-                    <label className={labelCls}>Periode Waktu</label>
-                    <input
-                        type="text"
-                        className={inputCls}
-                        value={form.data.period}
-                        onChange={(e) => form.setData('period', e.target.value)}
-                        placeholder="Contoh: Aug - Oct 2025 atau Jan 2024 - Present"
-                    />
-                </div>
-
-                <div>
-                    <label className={labelCls}>Lokasi</label>
-                    <input
-                        type="text"
-                        className={inputCls}
-                        value={form.data.location}
-                        onChange={(e) => form.setData('location', e.target.value)}
-                        placeholder="Contoh: Malang, East Java"
-                    />
-                </div>
-
-                <div>
-                    <label className={labelCls}>
-                        Badge Label {form.data.type === 'organization' ? '(Disarankan)' : '(Opsional)'}
-                    </label>
-                    <input
-                        type="text"
-                        className={inputCls}
-                        value={form.data.badge}
-                        onChange={(e) => form.setData('badge', e.target.value)}
-                        placeholder="Contoh: Executive Leadership atau Media Outreach"
-                    />
-                </div>
-
-                <div>
-                    <label className={labelCls}>Urutan Tampilan</label>
-                    <input
-                        type="number"
-                        className={inputCls}
-                        value={form.data.order}
-                        onChange={(e) => form.setData('order', parseInt(e.target.value) || 1)}
-                        min="1"
-                    />
-                </div>
-
-                <div className="sm:col-span-2">
-                    <label className={labelCls}>
-                        Poin Deskripsi & Pencapaian <span className="font-normal text-zinc-400">(satu baris = satu poin bullet)</span>
-                    </label>
-                    <textarea
-                        className={inputCls + ' resize-y min-h-[110px]'}
-                        value={form.data.points}
-                        onChange={(e) => form.setData('points', e.target.value)}
-                        placeholder={"Poin pertama deskripsi tanggung jawab & program...\nPoin kedua pencapaian terukur & teknologi yang digunakan...\nPoin ketiga hasil & dampak positif..."}
-                        rows={4}
-                    />
-                </div>
-
-                {/* Gallery Manager */}
-                <div className="sm:col-span-2 pt-2 border-t border-white/10">
-                    <ExperienceGalleryManager
-                        images={form.data.images || []}
-                        onChange={(imgs) => form.setData('images', imgs)}
-                    />
-                </div>
-
-                <div className="sm:col-span-2 pt-2">
-                    <label className="flex items-center gap-3 cursor-pointer select-none">
-                        <div
-                            onClick={() => form.setData('is_active', !form.data.is_active)}
-                            className={`w-11 h-6 rounded-full flex items-center px-0.5 transition-colors cursor-pointer ${form.data.is_active ? 'bg-indigo-600' : 'bg-zinc-700'}`}
-                        >
-                            <span className={`w-5 h-5 rounded-full bg-white shadow-sm transition-transform ${form.data.is_active ? 'translate-x-5' : 'translate-x-0'}`} />
-                        </div>
-                        <div>
-                            <span className="text-sm font-medium text-zinc-200">Tampilkan di website publik</span>
-                            <p className="text-[11px] text-zinc-500">Jika dinonaktifkan, pengalaman ini hanya terlihat di panel admin.</p>
-                        </div>
-                    </label>
-                </div>
-            </div>
-
-            <div className="flex justify-end gap-3 pt-4 border-t border-white/10">
-                <button
-                    type="button"
-                    onClick={onClose}
-                    className="px-4 py-2.5 rounded-xl text-sm font-medium text-zinc-300 hover:text-white hover:bg-zinc-800 transition"
-                >
-                    Batal
-                </button>
-                <button
-                    type="submit"
-                    disabled={form.processing}
-                    className="px-6 py-2.5 rounded-xl text-sm font-semibold bg-indigo-600 hover:bg-indigo-500 text-white transition flex items-center gap-2 shadow-lg shadow-indigo-600/20 disabled:opacity-60"
-                >
-                    {form.processing ? (
-                        <>
-                            <Loader2 className="w-4 h-4 animate-spin" />
-                            <span>Menyimpan ke database…</span>
-                        </>
-                    ) : (
-                        <>
-                            <Check className="w-4 h-4" />
-                            <span>{isEdit ? 'Simpan Perubahan' : 'Tambah Pengalaman'}</span>
-                        </>
-                    )}
-                </button>
-            </div>
-        </form>
-    );
 
     return (
         <AdminLayout title="Manajemen Pengalaman">
@@ -807,8 +811,8 @@ export default function ExperiencePage({ experiences = [] }) {
             </div>
 
             {/* ── CREATE MODAL ────────────────────────────── */}
-            {isCreateModalOpen && (
-                <div className="fixed inset-0 z-50 flex items-start justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
+            {isCreateModalOpen && typeof document !== 'undefined' && createPortal(
+                <div className="fixed inset-0 z-[9999] flex items-start justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
                     <div className="bg-[#13151f] border border-white/15 rounded-2xl shadow-2xl w-full max-w-2xl my-8 overflow-hidden">
                         <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-[#171a27]">
                             <div className="flex items-center gap-2 text-zinc-100 font-bold">
@@ -832,12 +836,13 @@ export default function ExperiencePage({ experiences = [] }) {
                             />
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
 
             {/* ── EDIT MODAL ──────────────────────────────── */}
-            {editingExperience && (
-                <div className="fixed inset-0 z-50 flex items-start justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
+            {editingExperience && typeof document !== 'undefined' && createPortal(
+                <div className="fixed inset-0 z-[9999] flex items-start justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
                     <div className="bg-[#13151f] border border-white/15 rounded-2xl shadow-2xl w-full max-w-2xl my-8 overflow-hidden">
                         <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-[#171a27]">
                             <div className="flex items-center gap-2 text-zinc-100 font-bold">
@@ -862,12 +867,13 @@ export default function ExperiencePage({ experiences = [] }) {
                             />
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
 
             {/* ── DELETE CONFIRM MODAL ────────────────────── */}
-            {deletingExperience && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+            {deletingExperience && typeof document !== 'undefined' && createPortal(
+                <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
                     <div className="bg-[#13151f] border border-white/15 rounded-2xl shadow-2xl w-full max-w-sm p-6 space-y-4">
                         <div className="flex items-center gap-3 text-rose-400">
                             <div className="w-10 h-10 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center">
@@ -896,7 +902,8 @@ export default function ExperiencePage({ experiences = [] }) {
                             </button>
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
         </AdminLayout>
     );

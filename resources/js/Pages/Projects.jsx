@@ -1,4 +1,4 @@
-﻿import { Head } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 import PortfolioLayout from '@/Layouts/PortfolioLayout';
 import MediaGallery from '@/Components/MediaGallery';
 import { FolderGit2, ExternalLink } from 'lucide-react';
@@ -26,7 +26,7 @@ export default function Projects({ projects = [] }) {
         : projects.filter(p => p.category === selectedCategory);
 
     return (
-        <PortfolioLayout>
+        <>
             <Head title="Projects - Muhammad Rafli Pradipta" />
             <div className="space-y-8">
                 <div>
@@ -77,7 +77,7 @@ export default function Projects({ projects = [] }) {
                                 <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
                                     <div className="space-y-1">
                                         <div className="flex items-center gap-2">
-                                            <h2 className="text-base sm:text-lg font-semibold text-zinc-900 dark:text-zinc-100 leading-snug">
+                                            <h2 className="text-base sm:text-lg font-semibold text-zinc-900 dark:text-zinc-100 leading-snug heading-interactive">
                                                 {proj.title}
                                             </h2>
                                             {proj.link_url && (
@@ -88,19 +88,19 @@ export default function Projects({ projects = [] }) {
                                             )}
                                         </div>
                                         <div className="flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400">
-                                            {proj.subtitle && <span className="font-medium text-zinc-700 dark:text-zinc-300">{proj.subtitle}</span>}
+                                            {proj.subtitle && <span className="font-medium text-zinc-700 dark:text-zinc-300 subtitle-interactive">{proj.subtitle}</span>}
                                             {proj.subtitle && proj.period && <span>&middot;</span>}
-                                            {proj.period && <span className="font-mono">{proj.period}</span>}
+                                            {proj.period && <span className="font-mono text-meta">{proj.period}</span>}
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-2 self-start flex-shrink-0 flex-wrap">
                                         {proj.badge && (
-                                            <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200/60 dark:border-indigo-800">
+                                            <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200/60 dark:border-indigo-800 badge-interactive">
                                                 {proj.badge}
                                             </span>
                                         )}
                                         {proj.metrics && (
-                                            <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300">
+                                            <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 badge-interactive">
                                                 {proj.metrics}
                                             </span>
                                         )}
@@ -122,7 +122,7 @@ export default function Projects({ projects = [] }) {
                                 {proj.tools && proj.tools.length > 0 && (
                                     <div className="flex flex-wrap items-center gap-1.5 pt-3 border-t border-zinc-100 dark:border-zinc-800/60">
                                         {proj.tools.map((t, idx) => (
-                                            <span key={idx} className="text-[11px] font-medium px-2.5 py-1 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+                                            <span key={idx} className="text-[11px] font-medium px-2.5 py-1 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 tool-tag border border-transparent">
                                                 {t}
                                             </span>
                                         ))}
@@ -133,6 +133,8 @@ export default function Projects({ projects = [] }) {
                     </div>
                 )}
             </div>
-        </PortfolioLayout>
+        </>
     );
 }
+
+Projects.layout = (page) => <PortfolioLayout>{page}</PortfolioLayout>;

@@ -19,7 +19,7 @@ export default function Experience({ workExperiences = [], organizationalExperie
     const showOrg = (activeTab === 'all' || activeTab === 'organization') && organizationalExperiences.length > 0;
 
     return (
-        <PortfolioLayout>
+        <>
             <Head title="Experience - Muhammad Rafli Pradipta" />
 
             <div className="space-y-8">
@@ -62,7 +62,7 @@ export default function Experience({ workExperiences = [], organizationalExperie
                     {/* Work Experience Timeline */}
                     {showWork && (
                         <section className="space-y-6">
-                            <h2 className="text-base font-semibold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+                            <h2 className="text-base font-semibold text-zinc-900 dark:text-zinc-100 flex items-center gap-2 heading-interactive">
                                 <Building2 className="w-4 h-4 text-indigo-500" />
                                 <span>Professional Work Experience</span>
                             </h2>
@@ -76,17 +76,17 @@ export default function Experience({ workExperiences = [], organizationalExperie
 
                                             <div className="space-y-2">
                                                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-                                                    <h3 className="text-sm sm:text-base font-semibold text-zinc-900 dark:text-zinc-100">
+                                                    <h3 className="text-sm sm:text-base font-semibold text-zinc-900 dark:text-zinc-100 heading-interactive">
                                                         {work.role}
                                                     </h3>
                                                     {work.period && (
-                                                        <span className="text-xs font-mono text-zinc-400 dark:text-zinc-500">
+                                                        <span className="text-xs font-mono text-zinc-400 dark:text-zinc-500 text-meta">
                                                             {work.period}
                                                         </span>
                                                     )}
                                                 </div>
 
-                                                <div className="text-xs font-medium text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5 flex-wrap">
+                                                <div className="text-xs font-medium text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5 flex-wrap subtitle-interactive">
                                                     <span>{work.company}</span>
                                                     {work.location && (
                                                         <>
@@ -121,56 +121,62 @@ export default function Experience({ workExperiences = [], organizationalExperie
                     {/* Organizational Experience */}
                     {showOrg && (
                         <section className={`space-y-6 ${activeTab === 'all' && showWork ? 'pt-6 border-t border-zinc-100 dark:border-zinc-800/80' : ''}`}>
-                            <h2 className="text-base font-semibold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+                            <h2 className="text-base font-semibold text-zinc-900 dark:text-zinc-100 flex items-center gap-2 heading-interactive">
                                 <Users2 className="w-4 h-4 text-indigo-500" />
                                 <span>Organizational & Leadership Experience</span>
                             </h2>
 
-                            <div className="grid gap-4">
+                            <div className="relative border-l border-zinc-200 dark:border-zinc-800 ml-3 sm:ml-4 space-y-8 pl-6">
                                 {organizationalExperiences.map((org, index) => {
                                     const points = org.points || org.highlights || [];
                                     return (
-                                        <div
-                                            key={org.id || index}
-                                            className="p-5 rounded-lg border border-zinc-200/80 dark:border-zinc-800/80 bg-zinc-50/50 dark:bg-zinc-900/30 space-y-3"
-                                        >
-                                            <div className="flex items-start justify-between gap-2 flex-wrap">
-                                                <div>
+                                        <div key={org.id || index} className="relative group">
+                                            <div className="absolute -left-[31px] top-1 w-3 h-3 rounded-full bg-white dark:bg-zinc-950 border-2 border-indigo-500 group-hover:scale-125 transition-transform" />
+
+                                            <div className="space-y-2">
+                                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                                                     <div className="flex items-center gap-2 flex-wrap">
-                                                        <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+                                                        <h3 className="text-sm sm:text-base font-semibold text-zinc-900 dark:text-zinc-100 heading-interactive">
                                                             {org.role}
                                                         </h3>
                                                         {org.badge && (
-                                                            <span className="text-[10px] uppercase font-semibold tracking-wider px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">
+                                                            <span className="text-[10px] uppercase font-semibold tracking-wider px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 badge-interactive">
                                                                 {org.badge}
                                                             </span>
                                                         )}
                                                     </div>
-                                                    <p className="text-xs text-indigo-600 dark:text-indigo-400 font-medium mt-0.5">
-                                                        {org.company || org.org}
-                                                    </p>
+                                                    {org.period && (
+                                                        <span className="text-xs font-mono text-zinc-400 dark:text-zinc-500 text-meta">
+                                                            {org.period}
+                                                        </span>
+                                                    )}
                                                 </div>
-                                                {org.period && (
-                                                    <span className="text-xs font-mono text-zinc-500 dark:text-zinc-400">
-                                                        {org.period}
-                                                    </span>
+
+                                                <div className="text-xs font-medium text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5 flex-wrap subtitle-interactive">
+                                                    <span>{org.company || org.org}</span>
+                                                    {org.location && (
+                                                        <>
+                                                            <span>&middot;</span>
+                                                            <span className="text-zinc-500 dark:text-zinc-400 font-normal">{org.location}</span>
+                                                        </>
+                                                    )}
+                                                </div>
+
+                                                {points.length > 0 && (
+                                                    <ul className="space-y-1.5 pt-1 text-xs sm:text-[13px] text-zinc-600 dark:text-zinc-400 leading-relaxed list-disc list-outside pl-4 marker:text-zinc-400">
+                                                        {points.map((p, idx) => (
+                                                            <li key={idx}>{p}</li>
+                                                        ))}
+                                                    </ul>
+                                                )}
+
+                                                {/* Documentation Image Gallery */}
+                                                {org.images && org.images.length > 0 && (
+                                                    <div className="pt-2">
+                                                        <MediaGallery images={org.images} maxVisible={6} />
+                                                    </div>
                                                 )}
                                             </div>
-
-                                            {points.length > 0 && (
-                                                <ul className="space-y-1.5 text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed list-disc list-outside pl-4 marker:text-zinc-400">
-                                                    {points.map((p, idx) => (
-                                                        <li key={idx}>{p}</li>
-                                                    ))}
-                                                </ul>
-                                            )}
-
-                                            {/* Documentation Image Gallery */}
-                                            {org.images && org.images.length > 0 && (
-                                                <div className="pt-1">
-                                                    <MediaGallery images={org.images} maxVisible={6} />
-                                                </div>
-                                            )}
                                         </div>
                                     );
                                 })}
@@ -186,6 +192,8 @@ export default function Experience({ workExperiences = [], organizationalExperie
                     )}
                 </div>
             </div>
-        </PortfolioLayout>
+        </>
     );
 }
+
+Experience.layout = (page) => <PortfolioLayout>{page}</PortfolioLayout>;

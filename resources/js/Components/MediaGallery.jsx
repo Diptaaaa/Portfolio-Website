@@ -1,9 +1,11 @@
-import { useState, useEffect, useCallback } from 'react';
+﻿import { useState, useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { X, ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react';
 
 export default function MediaGallery({ images = [], maxVisible = 6, className = '' }) {
     const [isOpen, setIsOpen] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [isCaptionExpanded, setIsCaptionExpanded] = useState(false);
 
     if (!images || images.length === 0) return null;
 
@@ -21,19 +23,23 @@ export default function MediaGallery({ images = [], maxVisible = 6, className = 
 
     const openLightbox = (index) => {
         setCurrentIndex(index);
+        setIsCaptionExpanded(false);
         setIsOpen(true);
     };
 
     const closeLightbox = () => {
         setIsOpen(false);
+        setIsCaptionExpanded(false);
     };
 
     const nextImage = useCallback(() => {
         setCurrentIndex((prev) => (prev + 1) % normalizedImages.length);
+        setIsCaptionExpanded(false);
     }, [normalizedImages.length]);
 
     const prevImage = useCallback(() => {
         setCurrentIndex((prev) => (prev - 1 + normalizedImages.length) % normalizedImages.length);
+        setIsCaptionExpanded(false);
     }, [normalizedImages.length]);
 
     useEffect(() => {
@@ -49,8 +55,42 @@ export default function MediaGallery({ images = [], maxVisible = 6, className = 
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [isOpen, nextImage, prevImage]);
 
+    // Reset expanded caption state whenever index changes
+    useEffect(() => {
+        setIsCaptionExpanded(false);
+    }, [currentIndex]);
+
+    // Helper to render URLs as clickable links
+    const renderCaptionWithLinks = (text) => {
+        if (!text) return null;
+        const urlRegex = /(https?:\/\/[^\s]+)/g;
+        const parts = text.split(urlRegex);
+
+        return parts.map((part, i) => {
+            if (part.match(urlRegex)) {
+                return (
+                    <a
+                        key={i}
+                        href={part}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-indigo-400 hover:text-indigo-300 underline break-all font-medium transition-colors"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        {part}
+                    </a>
+                );
+            }
+            return part;
+        });
+    };
+
     const visibleThumbnails = normalizedImages.slice(0, maxVisible);
     const remainingCount = normalizedImages.length - maxVisible;
+
+    const currentItem = normalizedImages[currentIndex] || {};
+    const rawCaption = currentItem.caption || currentItem.alt || '';
+    const isLongCaption = rawCaption.length > 50;
 
     return (
         <div className={`space-y-1.5 ${className}`}>
@@ -89,9 +129,9 @@ export default function MediaGallery({ images = [], maxVisible = 6, className = 
             </div>
 
             {/* Lightbox Modal */}
-            {isOpen && (
+            {isOpen && typeof document !== 'undefined' && createPortal(
                 <div
-                    className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/90 backdrop-blur-md animate-in fade-in duration-200"
+                    className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 bg-black/90 backdrop-blur-md animate-in fade-in duration-200"
                     onClick={closeLightbox}
                 >
                     <div
@@ -99,17 +139,56 @@ export default function MediaGallery({ images = [], maxVisible = 6, className = 
                         onClick={(e) => e.stopPropagation()}
                     >
                         {/* Lightbox Header */}
-                        <div className="w-full flex items-center justify-between text-white/80 pb-3 px-2">
-                            <div className="text-xs font-mono">
+                        <div className="w-full flex items-start justify-between text-white/80 pb-3 px-2 gap-3 relative">
+                            <div className="text-xs font-mono pt-1 shrink-0">
                                 {currentIndex + 1} / {normalizedImages.length}
                             </div>
-                            <div className="text-xs sm:text-sm font-medium text-white text-center truncate max-w-[60%] px-2">
-                                {normalizedImages[currentIndex].caption || normalizedImages[currentIndex].alt}
+
+                            {/* Caption with collapsible 'more' / 'less' */}
+                            <div className={`text-xs sm:text-sm font-medium text-white text-center transition-all duration-200 ${
+                                isCaptionExpanded
+                                    ? 'max-w-[85%] break-all bg-zinc-900/90 backdrop-blur-md rounded-lg p-2.5 shadow-xl border border-white/15 z-30 max-h-40 overflow-y-auto'
+                                    : 'max-w-[70%] truncate'
+                            }`}>
+                                {isLongCaption ? (
+                                    isCaptionExpanded ? (
+                                        <span>
+                                            {renderCaptionWithLinks(rawCaption)}
+                                            <button
+                                                type="button"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setIsCaptionExpanded(false);
+                                                }}
+                                                className="ml-2 text-indigo-400 hover:text-indigo-300 font-bold text-xs underline cursor-pointer inline-flex items-center"
+                                            >
+                                                less
+                                            </button>
+                                        </span>
+                                    ) : (
+                                        <span>
+                                            <span className="opacity-95">{rawCaption.slice(0, 48)}...</span>
+                                            <button
+                                                type="button"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setIsCaptionExpanded(true);
+                                                }}
+                                                className="ml-1.5 text-indigo-400 hover:text-indigo-300 font-bold text-xs underline cursor-pointer inline-flex items-center"
+                                            >
+                                                more
+                                            </button>
+                                        </span>
+                                    )
+                                ) : (
+                                    <span>{renderCaptionWithLinks(rawCaption)}</span>
+                                )}
                             </div>
+
                             <button
                                 type="button"
                                 onClick={closeLightbox}
-                                className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white transition"
+                                className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white transition shrink-0"
                                 aria-label="Close image viewer"
                             >
                                 <X className="w-5 h-5" />
@@ -169,7 +248,8 @@ export default function MediaGallery({ images = [], maxVisible = 6, className = 
                             </div>
                         )}
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
         </div>
     );

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Head, useForm, usePage, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import {
@@ -376,8 +377,8 @@ export default function Users({ users = [], filters = {} }) {
             {/* ═════════════════════════════════════════════════════════
                 MODAL: TAMBAH ADMIN BARU
             ═════════════════════════════════════════════════════════ */}
-            {isCreateModalOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fadeIn">
+            {isCreateModalOpen && typeof document !== 'undefined' && createPortal(
+                <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fadeIn">
                     <div
                         className="w-full max-w-md rounded-2xl bg-[#1a1d2e] border border-white/10 shadow-2xl overflow-hidden animate-scaleUp"
                         onClick={(e) => e.stopPropagation()}
@@ -509,14 +510,15 @@ export default function Users({ users = [], filters = {} }) {
                             </div>
                         </form>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
 
             {/* ═════════════════════════════════════════════════════════
                 MODAL: EDIT ADMIN
             ═════════════════════════════════════════════════════════ */}
-            {editingUser && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fadeIn">
+            {editingUser && typeof document !== 'undefined' && createPortal(
+                <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fadeIn">
                     <div
                         className="w-full max-w-md rounded-2xl bg-[#1a1d2e] border border-white/10 shadow-2xl overflow-hidden animate-scaleUp"
                         onClick={(e) => e.stopPropagation()}
@@ -652,14 +654,15 @@ export default function Users({ users = [], filters = {} }) {
                             </div>
                         </form>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
 
             {/* ═════════════════════════════════════════════════════════
                 MODAL: KONFIRMASI HAPUS ADMIN
             ═════════════════════════════════════════════════════════ */}
-            {deletingUser && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fadeIn">
+            {deletingUser && typeof document !== 'undefined' && createPortal(
+                <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fadeIn">
                     <div
                         className="w-full max-w-sm rounded-2xl bg-[#1a1d2e] border border-white/10 shadow-2xl p-6 text-center animate-scaleUp"
                         onClick={(e) => e.stopPropagation()}
@@ -692,7 +695,8 @@ export default function Users({ users = [], filters = {} }) {
                             </button>
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
         </AdminLayout>
     );
