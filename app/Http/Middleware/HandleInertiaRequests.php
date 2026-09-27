@@ -32,17 +32,13 @@ class HandleInertiaRequests extends Middleware
         $settings = [];
         $educations = [];
         try {
-            if (\Illuminate\Support\Facades\Schema::hasTable('portfolio_settings')) {
-                $settings = \App\Models\PortfolioSetting::getAllAsKeyValue();
-            }
-            if (\Illuminate\Support\Facades\Schema::hasTable('educations')) {
-                $educations = \App\Models\Education::where('is_active', true)
-                    ->orderBy('order', 'asc')
-                    ->orderBy('id', 'desc')
-                    ->get();
-            }
+            $settings = \App\Models\PortfolioSetting::getAllAsKeyValue();
+            $educations = \App\Models\Education::where('is_active', true)
+                ->orderBy('order', 'asc')
+                ->orderBy('id', 'desc')
+                ->get();
         } catch (\Throwable $e) {
-            // fallback if DB connection fails
+            // fallback if DB connection fails or table doesn't exist yet
         }
 
         return [

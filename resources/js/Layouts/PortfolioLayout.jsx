@@ -16,7 +16,6 @@ import AnimatedCursor from '@/Components/AnimatedCursor';
 export default function PortfolioLayout({ children }) {
     const [theme, setTheme] = useState('light');
     const [showScrollTop, setShowScrollTop] = useState(false);
-    const [isNavigating, setIsNavigating] = useState(false);
     const { url, props } = usePage();
     const settings = props.portfolio_settings || {};
     const authUser = props.auth?.user;
@@ -24,19 +23,11 @@ export default function PortfolioLayout({ children }) {
     const neonColor = settings.neon_cursor_color || 'magenta';
 
     useEffect(() => {
-        const unbindStart = router.on('start', () => {
-            setIsNavigating(true);
-        });
-
         const unbindFinish = router.on('finish', () => {
             window.scrollTo({ top: 0, behavior: 'instant' });
-            setTimeout(() => {
-                setIsNavigating(false);
-            }, 30);
         });
 
         return () => {
-            unbindStart();
             unbindFinish();
         };
     }, []);
@@ -123,14 +114,7 @@ export default function PortfolioLayout({ children }) {
 
             {/* Main Centered Content */}
             <main className="max-w-2xl mx-auto px-6 pt-10 sm:pt-14 pb-36 portfolio-content">
-                <div
-                    key={url}
-                    className={
-                        isNavigating
-                            ? 'opacity-0 -translate-y-2 scale-[0.99] transform transition-all duration-150 ease-out'
-                            : 'page-transition'
-                    }
-                >
+                <div key={url} className="page-transition">
                     {children}
                 </div>
             </main>
@@ -149,6 +133,7 @@ export default function PortfolioLayout({ children }) {
                             <Link
                                 key={item.id}
                                 href={item.path}
+                                prefetch
                                 className={`group relative p-2.5 rounded-lg transition-all duration-150 ${
                                     active
                                         ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white shadow-sm'

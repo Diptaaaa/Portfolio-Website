@@ -20,12 +20,21 @@ class AdminSeeder extends Seeder
         User::updateOrCreate(
             ['username' => 'admin'],
             [
-                'name'     => 'Admin',
+                'name'     => 'Administrator',
                 'username' => 'admin',
                 'password' => Hash::make('admin123'),
             ]
         );
 
-        $this->command->info('✅  Admin account seeded — username: admin | password: admin123');
+        User::updateOrCreate(
+            ['username' => 'dipta'],
+            [
+                'name'     => 'Muhammad Rafli Pradipta',
+                'username' => 'dipta',
+                'password' => Hash::make('admin123'),
+            ]
+        );
+
+        $this->command->info('✅  Admin accounts seeded — usernames: admin, dipta | default password: admin123');
     }
 }
