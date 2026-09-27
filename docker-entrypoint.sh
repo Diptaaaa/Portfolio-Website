@@ -19,6 +19,7 @@ export CACHE_STORE=${CACHE_STORE:-file}
 export APP_MAINTENANCE_DRIVER=${APP_MAINTENANCE_DRIVER:-file}
 export APP_MAINTENANCE_STORE=${APP_MAINTENANCE_STORE:-database}
 export QUEUE_CONNECTION=${QUEUE_CONNECTION:-sync}
+export BCRYPT_ROUNDS=${BCRYPT_ROUNDS:-12}
 export APP_DEBUG=true
 
 # Create storage symlink if not already created
