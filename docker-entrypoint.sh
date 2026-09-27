@@ -20,6 +20,7 @@ php artisan optimize:clear || true
 
 echo "Running database migrations..."
 php artisan migrate --force || echo "Migration warning: could not run migrations immediately, skipping."
+php artisan db:seed --class="Database\Seeders\AdminSeeder" --force || true
 
 # Cache Laravel configurations and routes for high production performance
 php artisan config:cache || true
