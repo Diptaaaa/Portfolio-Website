@@ -15,7 +15,9 @@ chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 # Create storage symlink if not already created
 php artisan storage:link || true
 
-# Run database migrations against configured database (e.g. Supabase PostgreSQL)
+# Clear old cache and run database migrations
+php artisan optimize:clear || true
+
 echo "Running database migrations..."
 php artisan migrate --force || echo "Migration warning: could not run migrations immediately, skipping."
 
