@@ -22,12 +22,7 @@ export SESSION_DRIVER=${SESSION_DRIVER:-cookie}
 export CACHE_STORE=${CACHE_STORE:-file}
 export APP_DEBUG=true
 
-# Generate .env file inside container so Laravel Dotenv natively loads all credentials
-env | grep -E '^(APP_|DB_|SESSION_|CACHE_|LOG_|QUEUE_|VITE_|PORT)' > /var/www/html/.env || true
-chown www-data:www-data /var/www/html/.env
-chmod 640 /var/www/html/.env
-
-# Clear any cached config so runtime environment variables are respected
+# Ensure clean state so runtime environment variables are respected
 php artisan optimize:clear || true
 
 # Run database migrations and seed admin account

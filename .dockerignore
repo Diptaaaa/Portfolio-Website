@@ -2,6 +2,7 @@
 .github
 .env
 .env.*
+vercel-env.txt
 node_modules
 vendor
 public/build
