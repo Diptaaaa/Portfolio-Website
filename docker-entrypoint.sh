@@ -13,6 +13,9 @@ export LOG_CHANNEL=${LOG_CHANNEL:-stderr}
 export DB_SSLMODE=${DB_SSLMODE:-require}
 export SESSION_DRIVER=${SESSION_DRIVER:-cookie}
 export CACHE_STORE=${CACHE_STORE:-file}
+export APP_MAINTENANCE_DRIVER=${APP_MAINTENANCE_DRIVER:-file}
+export APP_MAINTENANCE_STORE=${APP_MAINTENANCE_STORE:-database}
+export QUEUE_CONNECTION=${QUEUE_CONNECTION:-sync}
 export APP_DEBUG=true
 
 # Create storage symlink if not already created

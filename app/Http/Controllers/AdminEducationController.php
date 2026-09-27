@@ -45,7 +45,7 @@ class AdminEducationController extends Controller
             'period.required' => 'Periode tahun / bulan pendidikan wajib diisi.',
         ]);
 
-        $logoUrl = $validated['logo_url'] ?? '/images/ub-logo.png';
+        $logoUrl = \App\Helpers\MediaHelper::formatImageUrl($validated['logo_url'] ?? '/images/ub-logo.png');
 
         if ($request->hasFile('logo_file')) {
             $file = $request->file('logo_file');
@@ -95,7 +95,7 @@ class AdminEducationController extends Controller
             'period.required' => 'Periode tahun / bulan pendidikan wajib diisi.',
         ]);
 
-        $logoUrl = $validated['logo_url'] ?? $education->logo_url;
+        $logoUrl = \App\Helpers\MediaHelper::formatImageUrl($validated['logo_url'] ?? $education->logo_url);
 
         if ($request->hasFile('logo_file')) {
             $file = $request->file('logo_file');

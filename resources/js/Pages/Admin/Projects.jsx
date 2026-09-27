@@ -80,10 +80,21 @@ function ProjectGalleryManager({ images = [], onChange }) {
         }
     };
 
+    const formatImageUrl = (url) => {
+        if (!url) return '';
+        const trimmed = url.trim();
+        const driveMatch = trimmed.match(/(?:drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?(?:.*&)?id=)|docs\.google\.com\/file\/d\/)([a-zA-Z0-9_-]+)/i);
+        if (driveMatch && driveMatch[1]) {
+            return `https://lh3.googleusercontent.com/d/${driveMatch[1]}`;
+        }
+        return trimmed;
+    };
+
     const handleAddUrl = (e) => {
         e.preventDefault();
-        if (!urlInput.src.trim()) return;
-        onChange([...images, { src: urlInput.src.trim(), alt: urlInput.alt.trim(), caption: urlInput.caption.trim() }]);
+        const formattedSrc = formatImageUrl(urlInput.src);
+        if (!formattedSrc) return;
+        onChange([...images, { src: formattedSrc, alt: urlInput.alt.trim(), caption: urlInput.caption.trim() }]);
         setUrlInput({ src: '', alt: '', caption: '' });
         setShowUrlAdd(false);
     };

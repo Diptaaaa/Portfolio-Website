@@ -206,10 +206,10 @@ class AdminProjectController extends Controller
         $result = [];
         foreach ($items as $img) {
             if (is_string($img) && !empty(trim($img))) {
-                $result[] = ['src' => trim($img), 'alt' => '', 'caption' => ''];
+                $result[] = ['src' => \App\Helpers\MediaHelper::formatImageUrl(trim($img)), 'alt' => '', 'caption' => ''];
             } elseif (is_array($img) && !empty($img['src'])) {
                 $result[] = [
-                    'src'     => (string) $img['src'],
+                    'src'     => \App\Helpers\MediaHelper::formatImageUrl((string) $img['src']),
                     'alt'     => (string) ($img['alt'] ?? ''),
                     'caption' => (string) ($img['caption'] ?? ''),
                 ];
