@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { Link, usePage, router } from '@inertiajs/react';
 import { 
     Home, 
@@ -11,7 +11,8 @@ import {
     FileText,
     ArrowUp
 } from 'lucide-react';
-import AnimatedCursor from '@/Components/AnimatedCursor';
+
+const AnimatedCursor = lazy(() => import('@/Components/AnimatedCursor'));
 
 export default function PortfolioLayout({ children }) {
     const [theme, setTheme] = useState('light');
@@ -81,7 +82,9 @@ export default function PortfolioLayout({ children }) {
 
     return (
         <div className="min-h-screen bg-white text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100 transition-colors duration-200 selection:bg-zinc-900 selection:text-white dark:selection:bg-white dark:selection:text-zinc-900">
-            <AnimatedCursor enabled={isNeonEnabled} colorTheme={neonColor} />
+            <Suspense fallback={null}>
+                <AnimatedCursor enabled={isNeonEnabled} colorTheme={neonColor} />
+            </Suspense>
 
             {/* Top Subtle Status Bar */}
             <header className="border-b border-zinc-100 dark:border-zinc-900 py-2.5 px-6 sticky top-0 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md z-30">
@@ -133,8 +136,7 @@ export default function PortfolioLayout({ children }) {
                             <Link
                                 key={item.id}
                                 href={item.path}
-                                prefetch
-                                className={`group relative p-2.5 rounded-lg transition-all duration-150 ${
+                                className={`group relative p-2.5 rounded-lg transition-colors duration-150 ${
                                     active
                                         ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white shadow-sm'
                                         : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50'

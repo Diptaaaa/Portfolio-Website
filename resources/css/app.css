@@ -102,21 +102,18 @@ select.admin-input-dark option {
     background: rgba(255, 255, 255, 0.4);
 }
 
-/* ── Smooth Page Transitions (Hardware Accelerated) ────────────── */
+/* ── Ultra-Fast, Silky-Smooth Page Transitions (Zero Layout Shift) ────────────── */
 @keyframes pageEnter {
     0% {
-        opacity: 0;
-        transform: translateY(14px) scale(0.99);
+        opacity: 0.85;
     }
     100% {
         opacity: 1;
-        transform: none;
     }
 }
 
 .page-transition {
-    animation: pageEnter 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
-    will-change: opacity, transform;
+    animation: pageEnter 0.12s ease-out both;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -135,30 +132,7 @@ select.admin-input-dark option {
     box-shadow: 0 0 10px #6366f1, 0 0 5px #818cf8 !important;
 }
 
-/* ── High-Performance Interactive Text Hover Effects (GPU-Friendly) ── */
-
-/* Heading Hover (Silky-Smooth Color Transition, 0ms Paint Cost) */
-.heading-interactive,
-.portfolio-content h1,
-.portfolio-content h2,
-.portfolio-content h3 {
-    transition: color 0.15s ease;
-    cursor: default;
-}
-
-.heading-interactive:hover,
-.portfolio-content h1:hover,
-.portfolio-content h2:hover,
-.portfolio-content h3:hover {
-    color: #4f46e5;
-}
-
-.dark .heading-interactive:hover,
-.dark .portfolio-content h1:hover,
-.dark .portfolio-content h2:hover,
-.dark .portfolio-content h3:hover {
-    color: #a5b4fc;
-}
+/* ── Lightweight, GPU-Friendly Interactive Hover Effects ── */
 
 /* Ensure all interactive links and buttons retain pointer cursor without flickering */
 .portfolio-content a,
@@ -168,22 +142,7 @@ select.admin-input-dark option {
     cursor: pointer !important;
 }
 
-/* Prevent nested link cards from conflicting with standalone heading hover */
-.portfolio-content a h1,
-.portfolio-content a h2,
-.portfolio-content a h3,
-.portfolio-content a p,
-.portfolio-content a:hover h1,
-.portfolio-content a:hover h2,
-.portfolio-content a:hover h3,
-.portfolio-content a:hover p {
-    background: none !important;
-    -webkit-text-fill-color: initial !important;
-    text-shadow: none !important;
-    transform: none !important;
-}
-
-/* Subtle Interactive Subtitle / Meta Text (Color only - Zero Reflow) */
+/* Subtle Interactive Subtitle / Meta Text */
 .subtitle-interactive,
 .portfolio-content .text-meta {
     transition: color 0.15s ease;
@@ -197,57 +156,6 @@ select.admin-input-dark option {
 .dark .subtitle-interactive:hover,
 .dark .portfolio-content .text-meta:hover {
     color: #f1f5f9 !important;
-}
-
-/* Body Paragraphs & Descriptions (Instant 0ms Raster Cost) */
-.text-interactive,
-.portfolio-content p {
-    transition: color 0.15s ease;
-}
-
-.text-interactive:hover,
-.portfolio-content p:hover {
-    color: #09090b !important;
-}
-
-.dark .text-interactive:hover,
-.dark .portfolio-content p:hover {
-    color: #ffffff !important;
-}
-
-.portfolio-content li {
-    transition: color 0.15s ease;
-}
-
-.portfolio-content li:hover {
-    color: #09090b !important;
-}
-
-.dark .portfolio-content li:hover {
-    color: #ffffff !important;
-}
-
-/* Interactive Pills / Badges / Coursework Tags (No translateY to prevent border-flapping jitter) */
-.badge-interactive,
-.portfolio-content .coursework-tag,
-.portfolio-content .tool-tag {
-    transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease !important;
-}
-
-.badge-interactive:hover,
-.portfolio-content .coursework-tag:hover,
-.portfolio-content .tool-tag:hover {
-    border-color: rgba(99, 102, 241, 0.45) !important;
-    color: #4338ca !important;
-    background-color: #f4f4f5 !important;
-}
-
-.dark .badge-interactive:hover,
-.dark .portfolio-content .coursework-tag:hover,
-.dark .portfolio-content .tool-tag:hover {
-    border-color: rgba(129, 140, 248, 0.6) !important;
-    color: #ffffff !important;
-    background-color: rgba(63, 63, 70, 0.95) !important;
 }
 
 /* ── Interactive Avatar Ring & Glow Effects (Stationary, Non-Rotating) ── */

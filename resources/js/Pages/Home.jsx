@@ -248,7 +248,7 @@ export default function Home() {
                                                 {courses.map((course, idx) => (
                                                     <span
                                                         key={idx}
-                                                        className="text-[11px] px-2.5 py-1 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-medium coursework-tag border border-transparent"
+                                                        className="text-[11px] px-2.5 py-1 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-medium"
                                                     >
                                                         {course}
                                                     </span>
@@ -275,7 +275,6 @@ export default function Home() {
                                 <Link
                                     key={idx}
                                     href={link.href}
-                                    prefetch
                                     className="p-4 rounded-lg border border-zinc-200/80 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/40 hover:border-indigo-400 dark:hover:border-indigo-500/50 hover:bg-zinc-50/50 dark:hover:bg-zinc-900/80 transition-colors duration-150 group flex items-center justify-between shadow-sm"
                                 >
                                     <div className="flex items-start gap-3">
@@ -291,7 +290,7 @@ export default function Home() {
                                             </p>
                                         </div>
                                     </div>
-                                    <ArrowRight className="w-4 h-4 text-zinc-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 group-hover:translate-x-1 transition-transform duration-150 flex-shrink-0 ml-2 will-change-transform" />
+                                    <ArrowRight className="w-4 h-4 text-zinc-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors duration-150 flex-shrink-0 ml-2" />
                                 </Link>
                             );
                         })}
