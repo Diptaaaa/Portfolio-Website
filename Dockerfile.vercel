@@ -61,10 +61,14 @@ COPY . .
 # Copy built frontend assets from Stage 1
 COPY --from=frontend-builder /app/public/build ./public/build
 
-# Optimize composer autoloader and set file permissions
-RUN composer dump-autoload --optimize
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+# Ensure public upload directories exist and grant permissions
+RUN mkdir -p /var/www/html/public/images/profile \
+             /var/www/html/public/images/projects \
+             /var/www/html/public/images/experience \
+             /var/www/html/public/images/education \
+             /var/www/html/public/images/certificates \
+    && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/images \
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/images
 
 # Copy entrypoint script
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh

@@ -37,18 +37,23 @@ php artisan db:seed --class="Database\Seeders\AdminSeeder" --force || true
 php artisan route:cache || true
 php artisan view:cache || true
 
-# Ensure all storage subdirectories and log file exist, then grant full ownership and permissions to www-data
-echo "Ensuring storage and cache permissions for www-data..."
+# Ensure all storage subdirectories, log file, and public upload directories exist, then grant full ownership and permissions to www-data
+echo "Ensuring storage, cache, and public upload permissions for www-data..."
 mkdir -p /var/www/html/storage/logs \
          /var/www/html/storage/framework/cache/data \
          /var/www/html/storage/framework/sessions \
          /var/www/html/storage/framework/views \
-         /var/www/html/bootstrap/cache
+         /var/www/html/bootstrap/cache \
+         /var/www/html/public/images/profile \
+         /var/www/html/public/images/projects \
+         /var/www/html/public/images/experience \
+         /var/www/html/public/images/education \
+         /var/www/html/public/images/certificates
 
 touch /var/www/html/storage/logs/laravel.log
 
-chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
-chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache
+chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/images
+chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/images
 
 echo "Starting Apache web server..."
 exec apache2-foreground

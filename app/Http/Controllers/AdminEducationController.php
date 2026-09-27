@@ -48,14 +48,19 @@ class AdminEducationController extends Controller
         $logoUrl = \App\Helpers\MediaHelper::formatImageUrl($validated['logo_url'] ?? '/images/ub-logo.png');
 
         if ($request->hasFile('logo_file')) {
-            $file = $request->file('logo_file');
-            $uploadDir = public_path('images/education');
-            if (!file_exists($uploadDir)) {
-                mkdir($uploadDir, 0755, true);
+            try {
+                $file = $request->file('logo_file');
+                $uploadDir = public_path('images/education');
+                if (!file_exists($uploadDir)) {
+                    @mkdir($uploadDir, 0777, true);
+                }
+                $filename = 'edu_' . time() . '.' . $file->getClientOriginalExtension();
+                $file->move($uploadDir, $filename);
+                $logoUrl = '/images/education/' . $filename;
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::error('Education logo upload failed: ' . $e->getMessage());
+                return back()->withErrors(['logo_file' => 'Gagal mengunggah logo: ' . $e->getMessage()]);
             }
-            $filename = 'edu_' . time() . '.' . $file->getClientOriginalExtension();
-            $file->move($uploadDir, $filename);
-            $logoUrl = '/images/education/' . $filename;
         }
 
         $coursework = $this->parseCoursework($request->input('coursework'));
@@ -98,14 +103,19 @@ class AdminEducationController extends Controller
         $logoUrl = \App\Helpers\MediaHelper::formatImageUrl($validated['logo_url'] ?? $education->logo_url);
 
         if ($request->hasFile('logo_file')) {
-            $file = $request->file('logo_file');
-            $uploadDir = public_path('images/education');
-            if (!file_exists($uploadDir)) {
-                mkdir($uploadDir, 0755, true);
+            try {
+                $file = $request->file('logo_file');
+                $uploadDir = public_path('images/education');
+                if (!file_exists($uploadDir)) {
+                    @mkdir($uploadDir, 0777, true);
+                }
+                $filename = 'edu_' . time() . '.' . $file->getClientOriginalExtension();
+                $file->move($uploadDir, $filename);
+                $logoUrl = '/images/education/' . $filename;
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::error('Education logo upload failed: ' . $e->getMessage());
+                return back()->withErrors(['logo_file' => 'Gagal mengunggah logo: ' . $e->getMessage()]);
             }
-            $filename = 'edu_' . time() . '.' . $file->getClientOriginalExtension();
-            $file->move($uploadDir, $filename);
-            $logoUrl = '/images/education/' . $filename;
         }
 
         $coursework = $this->parseCoursework($request->input('coursework'));

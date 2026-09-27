@@ -36,21 +36,29 @@ class AdminExperienceController extends Controller
             'image.max'      => 'Ukuran gambar maksimal 10MB.',
         ]);
 
-        $file = $request->file('image');
-        $uploadDir = public_path('images/experience');
-        if (!file_exists($uploadDir)) {
-            mkdir($uploadDir, 0755, true);
+        try {
+            $file = $request->file('image');
+            $uploadDir = public_path('images/experience');
+            if (!file_exists($uploadDir)) {
+                @mkdir($uploadDir, 0777, true);
+            }
+
+            $filename = 'exp_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->move($uploadDir, $filename);
+
+            return response()->json([
+                'success'       => true,
+                'url'           => '/images/experience/' . $filename,
+                'filename'      => $filename,
+                'original_name' => $file->getClientOriginalName(),
+            ]);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Experience image upload failed: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mengunggah gambar pengalaman: ' . $e->getMessage(),
+            ], 500);
         }
-
-        $filename = 'exp_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-        $file->move($uploadDir, $filename);
-
-        return response()->json([
-            'success'       => true,
-            'url'           => '/images/experience/' . $filename,
-            'filename'      => $filename,
-            'original_name' => $file->getClientOriginalName(),
-        ]);
     }
 
     /**

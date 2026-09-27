@@ -50,21 +50,29 @@ class AdminSkillController extends Controller
             'image.max'      => 'Ukuran file sertifikat maksimal 10MB.',
         ]);
 
-        $file = $request->file('image');
-        $uploadDir = public_path('images/certificates');
-        if (!file_exists($uploadDir)) {
-            mkdir($uploadDir, 0755, true);
+        try {
+            $file = $request->file('image');
+            $uploadDir = public_path('images/certificates');
+            if (!file_exists($uploadDir)) {
+                @mkdir($uploadDir, 0777, true);
+            }
+
+            $filename = 'cert_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->move($uploadDir, $filename);
+
+            return response()->json([
+                'success'       => true,
+                'url'           => '/images/certificates/' . $filename,
+                'filename'      => $filename,
+                'original_name' => $file->getClientOriginalName(),
+            ]);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Certificate upload failed: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mengunggah berkas sertifikat: ' . $e->getMessage(),
+            ], 500);
         }
-
-        $filename = 'cert_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-        $file->move($uploadDir, $filename);
-
-        return response()->json([
-            'success'       => true,
-            'url'           => '/images/certificates/' . $filename,
-            'filename'      => $filename,
-            'original_name' => $file->getClientOriginalName(),
-        ]);
     }
 
     /* ─── Certification CRUD ───────────────────────────────────── */

@@ -66,14 +66,19 @@ class AdminConfigController extends Controller
 
         // Handle avatar image file upload if uploaded
         if ($request->hasFile('avatar_file')) {
-            $file = $request->file('avatar_file');
-            $uploadDir = public_path('images/profile');
-            if (!file_exists($uploadDir)) {
-                mkdir($uploadDir, 0755, true);
+            try {
+                $file = $request->file('avatar_file');
+                $uploadDir = public_path('images/profile');
+                if (!file_exists($uploadDir)) {
+                    @mkdir($uploadDir, 0777, true);
+                }
+                $filename = 'avatar_' . time() . '.' . $file->getClientOriginalExtension();
+                $file->move($uploadDir, $filename);
+                PortfolioSetting::set('avatar_url', '/images/profile/' . $filename, 'general', 'string');
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::error('Failed to upload avatar: ' . $e->getMessage());
+                return back()->withErrors(['avatar_file' => 'Gagal mengunggah berkas foto: ' . $e->getMessage()]);
             }
-            $filename = 'avatar_' . time() . '.' . $file->getClientOriginalExtension();
-            $file->move($uploadDir, $filename);
-            PortfolioSetting::set('avatar_url', '/images/profile/' . $filename, 'general', 'string');
         } elseif ($request->filled('avatar_url')) {
             PortfolioSetting::set('avatar_url', $request->input('avatar_url'), 'general', 'string');
         }
