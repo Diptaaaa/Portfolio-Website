@@ -35,6 +35,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Enable Apache mod_rewrite for Laravel routing
 RUN a2enmod rewrite
 
+# Ensure PHP passes all environment variables to $_ENV
+RUN echo "variables_order = \"EGPCS\"" > /usr/local/etc/php/conf.d/docker-php-ext-vars.ini
+
 # Configure Apache DocumentRoot to point to Laravel's public directory
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
