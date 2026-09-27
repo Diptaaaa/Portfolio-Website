@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-# If PORT environment variable is set (by Koyeb or Render), configure Apache to listen on it
+# If PORT environment variable is set (by Vercel, Koyeb, Render), configure Apache to listen on it
 if [ -n "$PORT" ]; then
     echo "Configuring Apache to listen on port $PORT..."
     sed -i "s/Listen 80/Listen $PORT/g" /etc/apache2/ports.conf
@@ -15,15 +15,21 @@ chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 # Create storage symlink if not already created
 php artisan storage:link || true
 
-# Clear old cache and run database migrations
+# Set fallback drivers to prevent 500 boot crashes if DB is cold
+export LOG_CHANNEL=stderr
+export DB_SSLMODE=${DB_SSLMODE:-require}
+export SESSION_DRIVER=${SESSION_DRIVER:-cookie}
+export CACHE_STORE=${CACHE_STORE:-file}
+
+# Clear any cached config so runtime environment variables are respected
 php artisan optimize:clear || true
 
-echo "Running database migrations..."
-php artisan migrate --force || echo "Migration warning: could not run migrations immediately, skipping."
+# Run database migrations and seed admin account
+echo "Running database migrations against Supabase..."
+php artisan migrate --force || echo "Migration notice: could not finish migrations immediately."
 php artisan db:seed --class="Database\Seeders\AdminSeeder" --force || true
 
-# Cache Laravel configurations and routes for high production performance
-php artisan config:cache || true
+# Cache routes and views
 php artisan route:cache || true
 php artisan view:cache || true
 
