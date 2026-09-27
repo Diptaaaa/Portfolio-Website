@@ -13,11 +13,11 @@ import {
 } from 'three';
 
 const config = {
-    shaderPoints: 12,
-    curvePoints: 24, // Short trail: quickly follows and dissolves
-    curveLerp: 0.82, // Snappy trail collapse
-    radius1: 1.2,    // Thin, delicate core
-    radius2: 7.0     // Soft, non-intrusive glow
+    shaderPoints: 8,
+    curvePoints: 16, // Snappy lightweight trail
+    curveLerp: 0.82,
+    radius1: 1.2,    // Thin core
+    radius2: 6.5     // Delicate soft glow
 };
 
 const vertexShader = `
@@ -198,7 +198,15 @@ export default function AnimatedCursor({ enabled = true, colorTheme = 'magenta' 
 
         let lastMove = 0;
         let targetAlpha = 0;
-        let animId;
+        let animId = null;
+        let isRunning = false;
+
+        const startRenderLoop = () => {
+            if (!isRunning) {
+                isRunning = true;
+                animId = requestAnimationFrame(render);
+            }
+        };
 
         const onPointerMove = (e) => {
             lastMove = performance.now();
@@ -217,6 +225,8 @@ export default function AnimatedCursor({ enabled = true, colorTheme = 'magenta' 
             } else {
                 spline.points[0].set(x, y);
             }
+
+            startRenderLoop();
         };
 
         const onPointerLeave = () => {
@@ -236,7 +246,7 @@ export default function AnimatedCursor({ enabled = true, colorTheme = 'magenta' 
             }
 
             // Smooth interpolation for alpha: quick fade in, rapid fade out
-            uAlpha.value += (targetAlpha - uAlpha.value) * (targetAlpha === 0 ? 0.16 : 0.25);
+            uAlpha.value += (targetAlpha - uAlpha.value) * (targetAlpha === 0 ? 0.18 : 0.25);
 
             if (uAlpha.value > 0.002) {
                 for (let i = 1; i < config.curvePoints; i++) {
@@ -247,15 +257,18 @@ export default function AnimatedCursor({ enabled = true, colorTheme = 'magenta' 
                 }
 
                 renderer.render(scene, camera);
-            } else if (uAlpha.value <= 0.002 && uAlpha.value !== 0) {
+                animId = requestAnimationFrame(render);
+            } else {
+                // Completely idle: clear canvas, pause loop to save 100% GPU cycles
                 uAlpha.value = 0;
                 renderer.clear();
+                isRunning = false;
+                animId = null;
             }
-
-            animId = requestAnimationFrame(render);
         };
 
-        animId = requestAnimationFrame(render);
+        // Initially render once if mouse moves
+        startRenderLoop();
 
         return () => {
             cancelAnimationFrame(animId);

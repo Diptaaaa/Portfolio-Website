@@ -11,7 +11,10 @@ fi
 # Set fallback drivers to prevent 500 boot crashes if DB is cold
 export LOG_CHANNEL=${LOG_CHANNEL:-stderr}
 export DB_SSLMODE=${DB_SSLMODE:-require}
-export SESSION_DRIVER=${SESSION_DRIVER:-cookie}
+export SESSION_DRIVER=${SESSION_DRIVER:-database}
+export SESSION_LIFETIME=${SESSION_LIFETIME:-120}
+export SESSION_SECURE_COOKIE=${SESSION_SECURE_COOKIE:-true}
+export APP_URL=${APP_URL:-https://portfolio-website-eta-flax-49.vercel.app}
 export CACHE_STORE=${CACHE_STORE:-file}
 export APP_MAINTENANCE_DRIVER=${APP_MAINTENANCE_DRIVER:-file}
 export APP_MAINTENANCE_STORE=${APP_MAINTENANCE_STORE:-database}

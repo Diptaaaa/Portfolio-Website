@@ -127,7 +127,7 @@ export default function PortfolioLayout({ children }) {
                     key={url}
                     className={
                         isNavigating
-                            ? 'opacity-0 -translate-y-2.5 scale-[0.985] blur-[1px] transform transition-all duration-200 ease-out'
+                            ? 'opacity-0 -translate-y-2 scale-[0.99] transform transition-all duration-150 ease-out'
                             : 'page-transition'
                     }
                 >
