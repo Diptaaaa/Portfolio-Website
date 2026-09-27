@@ -35,7 +35,7 @@ class AdminEducationController extends Controller
             'period' => ['required', 'string', 'max:255'],
             'gpa' => ['nullable', 'string', 'max:100'],
             'logo_url' => ['nullable', 'string', 'max:1000'],
-            'logo_file' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp,svg', 'max:5120'],
+            'logo_file' => ['nullable', 'file', 'mimes:jpeg,png,jpg,webp,svg', 'max:5120'],
             'coursework' => ['nullable'],
             'order' => ['nullable', 'integer'],
             'is_active' => ['nullable'],
@@ -45,7 +45,7 @@ class AdminEducationController extends Controller
             'period.required' => 'Periode tahun / bulan pendidikan wajib diisi.',
         ]);
 
-        $logoUrl = $validated['logo_url'] ?? '/images/ub-logo.svg';
+        $logoUrl = $validated['logo_url'] ?? '/images/ub-logo.png';
 
         if ($request->hasFile('logo_file')) {
             $file = $request->file('logo_file');
@@ -85,7 +85,7 @@ class AdminEducationController extends Controller
             'period' => ['required', 'string', 'max:255'],
             'gpa' => ['nullable', 'string', 'max:100'],
             'logo_url' => ['nullable', 'string', 'max:1000'],
-            'logo_file' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp,svg', 'max:5120'],
+            'logo_file' => ['nullable', 'file', 'mimes:jpeg,png,jpg,webp,svg', 'max:5120'],
             'coursework' => ['nullable'],
             'order' => ['nullable', 'integer'],
             'is_active' => ['nullable'],

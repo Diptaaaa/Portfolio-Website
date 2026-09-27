@@ -30,10 +30,9 @@ class AdminExperienceController extends Controller
     public function uploadImage(Request $request)
     {
         $request->validate([
-            'image' => ['required', 'file', 'image', 'mimes:jpeg,png,jpg,webp,svg,gif', 'max:10240'],
+            'image' => ['required', 'file', 'mimes:jpeg,png,jpg,webp,svg,gif', 'max:10240'],
         ], [
             'image.required' => 'File gambar wajib dipilih.',
-            'image.image'    => 'File harus berupa gambar yang valid.',
             'image.max'      => 'Ukuran gambar maksimal 10MB.',
         ]);
 

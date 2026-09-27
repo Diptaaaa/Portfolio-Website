@@ -44,7 +44,7 @@ use App\Http\Controllers\AdminProjectController;
 use App\Http\Controllers\AdminExperienceController;
 use App\Http\Controllers\AdminSkillController;
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard', [
             'settings' => \App\Models\PortfolioSetting::getAllAsKeyValue(),

@@ -26,7 +26,7 @@ export default function Education({ educations = [] }) {
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [editingEducation, setEditingEducation] = useState(null);
     const [deletingEducation, setDeletingEducation] = useState(null);
-    const [logoPreview, setLogoPreview] = useState('/images/ub-logo.svg');
+    const [logoPreview, setLogoPreview] = useState('/images/ub-logo.png');
     const [courseworkInput, setCourseworkInput] = useState('');
 
     const fileInputRef = useRef(null);
@@ -38,7 +38,7 @@ export default function Education({ educations = [] }) {
         degree: '',
         period: '',
         gpa: '',
-        logo_url: '/images/ub-logo.svg',
+        logo_url: '/images/ub-logo.png',
         logo_file: null,
         coursework: '',
         order: educations.length + 1,
@@ -47,6 +47,7 @@ export default function Education({ educations = [] }) {
 
     // Form for editing existing education
     const editForm = useForm({
+        _method: 'PUT',
         institution: '',
         degree: '',
         period: '',
@@ -66,7 +67,7 @@ export default function Education({ educations = [] }) {
             onSuccess: () => {
                 createForm.reset();
                 setIsCreateModalOpen(false);
-                setLogoPreview('/images/ub-logo.svg');
+                setLogoPreview('/images/ub-logo.png');
             },
         });
     };
@@ -77,17 +78,18 @@ export default function Education({ educations = [] }) {
         const cwText = Array.isArray(item.coursework) ? item.coursework.join(', ') : (item.coursework || '');
         setCourseworkInput(cwText);
         editForm.setData({
+            _method: 'PUT',
             institution: item.institution || '',
             degree: item.degree || '',
             period: item.period || '',
             gpa: item.gpa || '',
-            logo_url: item.logo_url || '/images/ub-logo.svg',
+            logo_url: item.logo_url || '/images/ub-logo.png',
             logo_file: null,
             coursework: cwText,
             order: item.order || 1,
             is_active: item.is_active ?? true,
         });
-        setLogoPreview(item.logo_url || '/images/ub-logo.svg');
+        setLogoPreview(item.logo_url || '/images/ub-logo.png');
         editForm.clearErrors();
     };
 

@@ -29,15 +29,12 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
-
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
-
+        $validated = $request->validated();
+        $request->user()->name = $validated['name'];
+        $request->user()->username = strtolower($validated['username']);
         $request->user()->save();
 
-        return Redirect::route('profile.edit');
+        return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
     /**
@@ -48,6 +45,10 @@ class ProfileController extends Controller
         $request->validate([
             'password' => ['required', 'current_password'],
         ]);
+
+        if (\App\Models\User::count() <= 1) {
+            return back()->withErrors(['password' => 'Tidak dapat menghapus akun karena harus ada minimal 1 akun admin di sistem!']);
+        }
 
         $user = $request->user();
 

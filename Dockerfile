@@ -1,0 +1,72 @@
+# ==========================================
+# Stage 1: Build Frontend Assets (React + Vite)
+# ==========================================
+FROM node:20-alpine AS frontend-builder
+WORKDIR /app
+
+# Copy dependency files and install
+COPY package*.json ./
+RUN npm ci || npm install
+
+# Copy source code and build Vite production bundle
+COPY . .
+RUN npm run build
+
+# ==========================================
+# Stage 2: PHP 8.2 Apache Production Server
+# ==========================================
+FROM php:8.2-apache
+
+# Install system dependencies and PHP extensions (including PostgreSQL driver)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libpq-dev \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    libzip-dev \
+    zip \
+    unzip \
+    git \
+    curl \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) pdo pdo_pgsql pdo_mysql gd zip opcache \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Enable Apache mod_rewrite for Laravel routing
+RUN a2enmod rewrite
+
+# Configure Apache DocumentRoot to point to Laravel's public directory
+ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
+RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+
+# Allow .htaccess rewrites
+RUN sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
+
+# Install Composer
+COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
+
+WORKDIR /var/www/html
+
+# Copy composer files and install PHP dependencies
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader --no-scripts
+
+# Copy application source code
+COPY . .
+
+# Copy built frontend assets from Stage 1
+COPY --from=frontend-builder /app/public/build ./public/build
+
+# Optimize composer autoloader and set file permissions
+RUN composer dump-autoload --optimize
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+
+# Copy entrypoint script
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+EXPOSE 80 8000
+
+ENTRYPOINT ["docker-entrypoint.sh"]
